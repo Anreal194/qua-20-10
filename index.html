@@ -258,29 +258,54 @@
 
     <script>
         // =========================================================
-        // DANH SÁCH DỮ LIỆU DÀNH CHO 41 SỐ
+        // DANH SÁCH 41 HỌC SINH ĐẦY ĐỦ
         // =========================================================
         const data = {
-            1: {
-                name: "Nguyễn Văn A",
-                wish: "Chúc bạn số 1 luôn xinh đẹp, tự tin và ngập tràn hạnh phúc trong ngày 20/10 nhé!",
-                img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400"
-            },
-            2: {
-                name: "Trần Thị B",
-                wish: "Số 2 ơi, chúc bạn một ngày 20/10 thật nhiều hoa, quà và nụ cười rạng rỡ!",
-                img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400"
-            },
-            3: {
-                name: "Lê Thị C",
-                wish: "Chúc số 3 luôn tươi trẻ, tràn đầy năng lượng và đạt được mọi mục tiêu trong cuộc sống!",
-                img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400"
-            }
-            // Bạn tiếp tục thêm số từ 4 đến 41 vào đây theo mẫu trên nhé!
+            1: { name: "Nguyễn Hoàng Gia An", wish: "Chúc bạn Nguyễn Hoàng Gia An (sinh ngày 18/11/2009) luôn xinh đẹp, tự tin, học giỏi và ngập tràn hạnh phúc trong ngày 20/10 nhé!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
+            2: { name: "Nguyễn Trâm Anh", wish: "Chúc bạn Nguyễn Trâm Anh (sinh ngày 25/05/2009) một ngày 20/10 thật nhiều hoa, quà và nụ cười rạng rỡ!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
+            3: { name: "Trương Thị Phương Anh", wish: "Chúc bạn Trương Thị Phương Anh (sinh ngày 01/01/2009) luôn tươi trẻ, tràn đầy năng lượng và đạt được mọi ước mơ!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
+            4: { name: "Trần Xuân Việt Bách", wish: "Chúc bạn Trần Xuân Việt Bách (sinh ngày 28/08/2009) luôn vui vẻ, học tập thật tốt và gặt hái nhiều thành công!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
+            5: { name: "Nguyễn Ngọc Bảo Chi", wish: "Chúc bạn Nguyễn Ngọc Bảo Chi (sinh ngày 10/07/2009) ngày 20/10 ngập tràn niềm vui, luôn là cô gái đáng yêu và tỏa sáng!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
+            6: { name: "Bùi Thị Thùy Dương", wish: "Chúc bạn Bùi Thị Thùy Dương (sinh ngày 02/01/2009) luôn luôn vui tươi, gặp nhiều may mắn và hạnh phúc trong cuộc sống!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
+            7: { name: "Lê Phương Đan", wish: "Chúc bạn Lê Phương Đan (sinh ngày 24/09/2009) một ngày 20/10 thật ý nghĩa, luôn tự tin và thành công trên con đường học tập!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
+            8: { name: "Nguyễn Thành Đạt", wish: "Chúc bạn Nguyễn Thành Đạt (sinh ngày 10/05/2009) luôn tràn đầy năng lượng, đạt kết quả cao trong học tập và mọi việc như ý!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
+            9: { name: "Cao Hải Đăng", wish: "Chúc bạn Cao Hải Đăng (sinh ngày 10/10/2009) luôn giữ vững phong độ, học giỏi và luôn vui vẻ mỗi ngày!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
+            10: { name: "Nguyễn Hoàng Trúc Giang", wish: "Chúc bạn Nguyễn Hoàng Trúc Giang (sinh ngày 21/09/2009) luôn xinh tươi, rạng rỡ và có một ngày 20/10 thật tuyệt vời!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
+            11: { name: "Nguyễn Ngọc Vân Hà", wish: "Chúc bạn Nguyễn Ngọc Vân Hà (sinh ngày 30/01/2009) luôn hạnh phúc, gặp nhiều may mắn và gặt hái thật nhiều điểm 10!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
+            12: { name: "Nguyễn Trần Gia Hân", wish: "Chúc bạn Nguyễn Trần Gia Hân (sinh ngày 29/09/2009) luôn vui vẻ, đáng yêu và gặt hái được nhiều thành công trong học tập!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
+            13: { name: "Trịnh Đình Thư Kỳ", wish: "Chúc bạn Trịnh Đình Thư Kỳ (sinh ngày 08/03/2009) luôn tràn đầy năng lượng tích cực và có một ngày 20/10 trọn vẹn niềm vui!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
+            14: { name: "Điện Thảo Linh", wish: "Chúc bạn Điện Thảo Linh (sinh ngày 16/03/2009) luôn xinh đẹp, giỏi giang và có thật nhiều kỷ niệm đẹp trong năm học này nhé!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
+            15: { name: "Lê Thị Mai Linh", wish: "Chúc bạn Lê Thị Mai Linh (sinh ngày 02/10/2009) luôn vui tươi, trẻ trung và đạt được mọi mục tiêu mà mình mong muốn!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
+            16: { name: "Hồ Trúc Ly", wish: "Chúc bạn Hồ Trúc Ly (sinh ngày 07/04/2009) một ngày 20/10 ngập tràn quà bánh, hoa tươi và luôn mỉm cười rạng rỡ!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
+            17: { name: "Nguyễn Thiều Trà My", wish: "Chúc bạn Nguyễn Thiều Trà My (sinh ngày 07/11/2009) luôn tự tin, học giỏi và luôn là người truyền năng lượng tích cực đến mọi người!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
+            18: { name: "Võ Ngọc Trà My", wish: "Chúc bạn Võ Ngọc Trà My (sinh ngày 24/09/2009) ngày 20/10 thật ý nghĩa, luôn xinh xắn và đạt thành tích cao trong học tập!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
+            19: { name: "Đỗ Thanh Ngọc", wish: "Chúc bạn Đỗ Thanh Ngọc (sinh ngày 10/02/2009) luôn vui vẻ, bình an và gặt hái được thật nhiều thành công rực rỡ!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
+            20: { name: "Phạm Lữ Nguyên Ngọc", wish: "Chúc bạn Phạm Lữ Nguyên Ngọc (sinh ngày 17/08/2009) luôn tỏa sáng, học tập tốt và có một ngày 20/10 thật đáng nhớ!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
+            21: { name: "Lê Uyên Nhi", wish: "Chúc bạn Lê Uyên Nhi (sinh ngày 30/05/2009) luôn xinh đẹp, ngọt ngào và đạt được mọi ước mơ trong tương lai!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
+            22: { name: "Ngô Thị Yến Nhi", wish: "Chúc bạn Ngô Thị Yến Nhi (sinh ngày 29/01/2009) luôn giữ được nụ cười tươi tắn, học giỏi và luôn gặp nhiều may mắn!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
+            23: { name: "Trần Lê Yến Nhi", wish: "Chúc bạn Trần Lê Yến Nhi (sinh ngày 17/08/2009) ngày 20/10 ngập tràn niềm vui, luôn tự tin và thành công trên mọi con đường!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
+            24: { name: "Nguyễn Ngọc Minh Phương", wish: "Chúc bạn Nguyễn Ngọc Minh Phương (sinh ngày 22/10/2009) luôn thông minh, xinh xắn và có một mùa 20/10 thật hạnh phúc!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
+            25: { name: "Nguyễn Đắc Khánh Quỳnh", wish: "Chúc bạn Nguyễn Đắc Khánh Quỳnh (sinh ngày 15/11/2009) luôn vui tươi, tràn đầy sức sống và đạt kết quả cao trong học tập!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
+            26: { name: "Bùi Đỗ Phương Thúy", wish: "Chúc bạn Bùi Đỗ Phương Thúy (sinh ngày 10/12/2009) luôn xinh đẹp, giỏi giang và gặt hái được thật nhiều thành tựu mới!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
+            27: { name: "Bùi Ngọc Anh Thư", wish: "Chúc bạn Bùi Ngọc Anh Thư (sinh ngày 21/05/2009) luôn rạng rỡ, đáng yêu và có một ngày 20/10 tràn ngập yêu thương!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
+            28: { name: "Lê Nguyễn Anh Thư", wish: "Chúc bạn Lê Nguyễn Anh Thư (sinh ngày 27/03/2009) luôn giữ vững tinh thần học tập hăng say và luôn vui vẻ mỗi ngày!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
+            29: { name: "Phan Hoàng Minh Thư", wish: "Chúc bạn Phan Hoàng Minh Thư (sinh ngày 14/02/2009) ngày 20/10 thật trọn vẹn, luôn tự tin và gặt hái nhiều điểm tốt!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
+            30: { name: "Phạm Trần Hoài Thương", wish: "Chúc bạn Phạm Trần Hoài Thương (sinh ngày 29/03/2009) luôn ấm áp, được yêu thương nhiều hơn và thành công trong cuộc sống!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
+            31: { name: "Phạm Lê Bảo Thy", wish: "Chúc bạn Phạm Lê Bảo Thy (sinh ngày 21/07/2009) luôn xinh xắn, năng động và luôn đạt kết quả xuất sắc trong học tập!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
+            32: { name: "Nguyễn Thị Thủy Tiên", wish: "Chúc bạn Nguyễn Thị Thủy Tiên (sinh ngày 06/10/2009) luôn rạng rỡ như đóa hoa tiên, gặp nhiều may mắn và luôn vui vẻ!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
+            33: { name: "Nguyễn Trần Thiên Trang", wish: "Chúc bạn Nguyễn Trần Thiên Trang (sinh ngày 02/03/2009) luôn duyên dáng, học giỏi và có một ngày 20/10 thật đáng nhớ!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
+            34: { name: "Ngô Thùy Trâm", wish: "Chúc bạn Ngô Thùy Trâm (sinh ngày 06/04/2009) luôn tràn đầy năng lượng, tự tin và đạt được mọi hoài bão của mình!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
+            35: { name: "Nguyễn Ngọc Nhã Trúc", wish: "Chúc bạn Nguyễn Ngọc Nhã Trúc (sinh ngày 05/05/2009) luôn dịu dàng, đáng yêu và gặt hái thật nhiều thành công!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
+            36: { name: "Mai Phạm Bảo Uyên", wish: "Chúc bạn Mai Phạm Bảo Uyên (sinh ngày 08/12/2009) luôn vui tươi, gặp nhiều điều tốt đẹp và luôn là niềm tự hào của mọi người!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
+            37: { name: "Đặng Nguyễn Tường Vi", wish: "Chúc bạn Đặng Nguyễn Tường Vi (sinh ngày 27/07/2009) luôn tươi vui như đóa hoa tường vi, học giỏi và luôn hạnh phúc!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
+            38: { name: "Nguyễn Thị Tường Vi", wish: "Chúc bạn Nguyễn Thị Tường Vi (sinh ngày 13/09/2009) một ngày 20/10 ngập tràn niềm vui, luôn tự tin và đạt thành tích cao!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
+            39: { name: "Lý Hữu Triệu Vinh", wish: "Chúc bạn Lý Hữu Triệu Vinh (sinh ngày 06/10/2009) luôn mạnh mẽ, học tập tiến bộ và đạt được mọi mục tiêu đề ra!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
+            40: { name: "Nguyễn Ngọc Tường Vy", wish: "Chúc bạn Nguyễn Ngọc Tường Vy (sinh ngày 30/01/2009) luôn xinh đẹp, rạng ngời và có một ngày lễ 20/10 tuyệt vời nhất!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
+            41: { name: "Trần Như Ý", wish: "Chúc bạn Trần Như Ý (sinh ngày 22/03/2009) vạn sự như ý, luôn vui vẻ, học giỏi và gặt hái nhiều thành công trong cuộc sống!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" }
         };
 
         // =========================================================
-        // BỘ 5 CÂU HỎI TRẮC NGHIỆM VỀ 20/10 (CÓ ĐÁP ÁN ĐÚNG: correctAnswer)
+        // BỘ 5 CÂU HỎI TRẮC NGHIỆM VỀ 20/10
         // =========================================================
         const questions = [
             {
@@ -302,7 +327,7 @@
                 correctAnswer: 1
             },
             {
-                q: "3. Món quà lớn nhất dành cho các bạn nữ trong ngày 20/10 là gì?",
+                q: "3. Món quà lớn nhất dành cho các bạn trong ngày 20/10 là gì?",
                 options: [
                     "A. Nụ cười và sự quan tâm chân thành 🥰",
                     "B. Bị phạt chạy 5 vòng sân",
