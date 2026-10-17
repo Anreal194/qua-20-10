@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Món Quà 20/10 Bí Mật 🎁</title>
+    <title>Món Quà 20/11 Tri Ân Bí Mật 🎁</title>
     <style>
         * {
             box-sizing: border-box;
@@ -19,7 +19,7 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            overflow: hidden; /* Tránh thanh cuộn ngang do hoa rơi */
+            overflow-x: hidden;
         }
 
         .card {
@@ -27,12 +27,12 @@
             padding: 30px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            max-width: 450px;
+            max-width: 480px;
             width: 100%;
             text-align: center;
             animation: fadeIn 0.5s ease-in-out;
             position: relative;
-            z-index: 999; /* Đảm bảo khung quà nằm trên hiệu ứng hoa */
+            z-index: 999;
         }
 
         h2 {
@@ -70,6 +70,7 @@
 
         .btn-group {
             display: flex;
+            flex-direction: column;
             gap: 10px;
             justify-content: center;
             margin-top: 15px;
@@ -79,17 +80,31 @@
             background: #ff4081;
             color: white;
             border: none;
-            padding: 12px 24px;
-            font-size: 16px;
+            padding: 12px 20px;
+            font-size: 15px;
             font-weight: bold;
             border-radius: 10px;
             cursor: pointer;
             transition: 0.3s;
+            width: 100%;
         }
 
         button:hover {
             background: #d81b60;
             transform: translateY(-2px);
+        }
+
+        .quiz-option-btn {
+            background: #fff0f5;
+            color: #d81b60;
+            border: 2px solid #ff4081;
+            text-align: left;
+            padding: 12px 15px;
+        }
+
+        .quiz-option-btn:hover {
+            background: #ff4081;
+            color: white;
         }
 
         .step {
@@ -121,6 +136,13 @@
             font-weight: bold;
             margin-bottom: 15px;
             font-size: 17px;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
 
         /* Nút bật/tắt nhạc nổi ở góc màn hình */
@@ -186,7 +208,7 @@
     <div class="card">
         <!-- BƯỚC 1: Hỏi Số -->
         <div id="step1" class="step active">
-            <h2>🌸 Chào Bạn! 🌸</h2>
+            <h2>💐 Chào Bạn! 💐</h2>
             <p>Cho mình hỏi bạn mang số bao nhiêu thế? (Nhập từ 1 đến 41):</p>
             <div class="input-group">
                 <input type="number" id="numInput" min="1" max="41" placeholder="Nhập số của bạn...">
@@ -197,10 +219,10 @@
         <!-- BƯỚC 2: Hỏi Hôm Nay Là Ngày Gì -->
         <div id="step2" class="step">
             <h2>❓ Đố Bạn Biết</h2>
-            <p>Bạn có biết hôm nay là ngày gì không ta?</p>
+            <p>Sắp tới có một ngày lễ rất đặc biệt, đó là ngày gì ta?</p>
             <div class="btn-group">
-                <button onclick="answerDay('20-10')">Ngày 20-10 🌹</button>
-                <button onclick="answerDay('khong')">Không biết 😅</button>
+                <button onclick="answerDay('20-11')">Ngày Nhà giáo Việt Nam 20/11 👨‍🏫</button>
+                <button onclick="answerDay('khong')">Không biết nữa 😅</button>
             </div>
         </div>
 
@@ -210,44 +232,107 @@
             <p id="commentDay" class="comment-text"></p>
             <p>Có phải bạn tên là: <br><strong id="personName" style="font-size: 20px; color: #d81b60;">...</strong> không?</p>
             <div class="btn-group">
-                <button onclick="goToFinalStep()">Đúng rồi chính là mình! 🥰</button>
+                <button onclick="startQuiz()">Đúng rồi, trả lời thử thách nhận quà nào! 🚀</button>
             </div>
         </div>
 
-        <!-- BƯỚC 4: Hiển Thị Lời Chúc & Hình Ảnh -->
-        <div id="step4" class="step">
-            <h2>🎁 Quà 20/10 Dành Cho Bạn 🎁</h2>
+        <!-- BƯỚC 4: 5 CÂU HỎI TRẮC NGHIỆM ĐÚNG / SAI -->
+        <div id="stepQuiz" class="step">
+            <div id="quizProgress" class="progress-text">Câu hỏi 1 / 5</div>
+            <h2 id="quizQuestion">Nội dung câu hỏi...</h2>
+            <p id="quizFeedback" style="color: #ff1744; font-weight: bold; min-height: 24px; margin-bottom: 10px;"></p>
+            <div id="quizOptions" class="btn-group">
+                <!-- Các lựa chọn sẽ tự động sinh ra ở đây -->
+            </div>
+        </div>
+
+        <!-- BƯỚC 5: Hiển Thị Lời Chúc & Hình Ảnh -->
+        <div id="stepFinal" class="step">
+            <h2>🎁 Quà Tri Ân 20/11 Dành Cho Bạn 🎁</h2>
             <div class="gift-box">
                 <p id="finalWish" style="font-size: 17px; color: #333; font-weight: bold;"></p>
-                <img id="finalImg" src="" alt="Hình ảnh lời chúc 20/10">
+                <img id="finalImg" src="" alt="Hình ảnh lời chúc 20/11">
             </div>
         </div>
     </div>
 
     <script>
         // =========================================================
-        // DANH SÁCH DỮ LIỆU DÀNH CHO 41 SỐ (CHỈNH SỬA TẠI ĐÂY)
+        // DANH SÁCH DỮ LIỆU DÀNH CHO 41 SỐ
         // =========================================================
         const data = {
             1: {
                 name: "Nguyễn Văn A",
-                wish: "Chúc bạn số 1 luôn xinh đẹp, tự tin và ngập tràn hạnh phúc trong ngày 20/10 nhé!",
+                wish: "Nhân ngày 20/11, chúc bạn số 1 luôn đạt nhiều thành công, học giỏi, may mắn và ngập tràn niềm vui!",
                 img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400"
             },
             2: {
                 name: "Trần Thị B",
-                wish: "Số 2 ơi, chúc bạn một ngày 20/10 thật nhiều hoa, quà và nụ cười rạng rỡ!",
+                wish: "Số 2 ơi, chúc bạn ngày 20/11 thật tươi vui, xinh đẹp và luôn là niềm tự hào của thầy cô!",
                 img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400"
             },
             3: {
                 name: "Lê Thị C",
-                wish: "Chúc số 3 luôn tươi trẻ, tràn đầy năng lượng và đạt được mọi mục tiêu!",
+                wish: "Chúc số 3 một mùa tri ân 20/11 ấm áp, tràn đầy năng lượng và nhận được thật nhiều điều tuyệt vời!",
                 img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400"
             }
+            // Bạn tiếp tục thêm số từ 4 đến 41 vào đây theo mẫu trên nhé!
         };
 
-        // Biến lưu trữ số người dùng đã chọn
+        // =========================================================
+        // BỘ 5 CÂU HỎI TRẮC NGHIỆM VỀ 20/11 (CÓ ĐÁP ÁN ĐÚNG: correctAnswer)
+        // (0 là đáp án A, 1 là đáp án B, 2 là đáp án C)
+        // =========================================================
+        const questions = [
+            {
+                q: "1. Ngày 20/11 hàng năm ở Việt Nam là ngày gì?",
+                options: [
+                    "A. Ngày Nhà giáo Việt Nam 💐",
+                    "B. Ngày Quốc tế Phụ nữ",
+                    "C. Ngày Học sinh Sinh viên"
+                ],
+                correctAnswer: 0 // Đáp án A đúng
+            },
+            {
+                q: "2. Loài hoa nào thường được dùng phổ biến nhất để tri ân thầy cô ngày 20/11?",
+                options: [
+                    "A. Hoa Hồng 🌹",
+                    "B. Hoa Hướng Dương 🌻",
+                    "C. Cả hai loài hoa trên 🥰"
+                ],
+                correctAnswer: 2 // Đáp án C đúng
+            },
+            {
+                q: "3. Hình ảnh nào thường được ví với công ơn dạy dỗ của thầy cô?",
+                options: [
+                    "A. Người lái đò đưa khách qua sông 🚣‍♂️",
+                    "B. Ngọn nón che mưa nắng",
+                    "C. Cây đại thụ tỏa bóng mát"
+                ],
+                correctAnswer: 0 // Đáp án A đúng
+            },
+            {
+                q: "4. Điều gì khiến các thầy cô hạnh phúc nhất trong ngày 20/11?",
+                options: [
+                    "A. Sự trưởng thành và nụ cười của học trò 🎓",
+                    "B. Món quà đắt tiền",
+                    "C. Được nghỉ học cả tuần"
+                ],
+                correctAnswer: 0 // Đáp án A đúng
+            },
+            {
+                q: "5. Bạn đã sẵn sàng mở món quà bí mật 20/11 chưa?",
+                options: [
+                    "A. Sẵn sàng rồi, mở quà thôi! 🎁",
+                    "B. Chưa sẵn sàng lắm",
+                    "C. Từ từ đã"
+                ],
+                correctAnswer: 0 // Đáp án A đúng
+            }
+        ];
+
         let selectedNumber = null;
+        let currentQuestionIndex = 0;
 
         // Xử lý Bước 1
         function goToStep2() {
@@ -257,20 +342,17 @@
                 return;
             }
             selectedNumber = num;
-            
-            // PHÁT NHẠC KHI QUA BƯỚC 2
             playMusic();
-            
             showStep('step2');
         }
 
-        // Xử lý Bước 2 (Câu hỏi ngày 20-10)
+        // Xử lý Bước 2
         function answerDay(choice) {
             const commentElement = document.getElementById('commentDay');
-            if (choice === '20-10') {
-                commentElement.innerText = "Wao giỏi dữ! 👏";
+            if (choice === '20-11') {
+                commentElement.innerText = "Chính xác luôn! 👏";
             } else {
-                commentElement.innerText = "Hôm nay là ngày 20-10 đấy nha! 😜";
+                commentElement.innerText = "Hôm nay chính là dịp 20/11 đấy nha! 😜";
             }
 
             const person = data[selectedNumber];
@@ -279,7 +361,60 @@
             showStep('step3');
         }
 
-        // Xử lý Bước 4 (Hiện quà)
+        // Bắt đầu phần trả lời 5 câu hỏi
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            document.getElementById('quizFeedback').innerText = "";
+            showQuestion();
+            showStep('stepQuiz');
+        }
+
+        // Hiển thị nội dung từng câu hỏi
+        function showQuestion() {
+            const qData = questions[currentQuestionIndex];
+            document.getElementById('quizProgress').innerText = `Câu hỏi ${currentQuestionIndex + 1} / ${questions.length}`;
+            document.getElementById('quizQuestion').innerText = qData.q;
+            document.getElementById('quizFeedback').innerText = ""; // Xóa thông báo cũ
+
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+
+            qData.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option-btn';
+                btn.innerText = opt;
+                // Kiểm tra đáp án khi người dùng bấm
+                btn.onclick = () => checkAnswer(index);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        // Kiểm tra đúng / sai
+        function checkAnswer(selectedIndex) {
+            const qData = questions[currentQuestionIndex];
+            const feedbackElement = document.getElementById('quizFeedback');
+
+            if (selectedIndex === qData.correctAnswer) {
+                // Nếu chọn đúng
+                feedbackElement.style.color = "#2e7d32"; // Màu xanh báo đúng
+                feedbackElement.innerText = "Chính xác! 🎉 Đang chuyển câu tiếp theo...";
+                
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    if (currentQuestionIndex < questions.length) {
+                        showQuestion();
+                    } else {
+                        goToFinalStep();
+                    }
+                }, 800); // Đợi 0.8 giây rồi chuyển câu
+            } else {
+                // Nếu chọn sai
+                feedbackElement.style.color = "#d32f2f"; // Màu đỏ báo sai
+                feedbackElement.innerText = "Chưa chính xác rồi, thử chọn đáp án khác xem nào! ❌";
+            }
+        }
+
+        // Xử lý Hiện Quà Cuối Cùng
         function goToFinalStep() {
             const person = data[selectedNumber];
             const wishElement = document.getElementById('finalWish');
@@ -289,14 +424,14 @@
                 wishElement.innerText = person.wish;
                 imgElement.src = person.img;
             } else {
-                wishElement.innerText = "Chúc bạn có một ngày 20/10 vô cùng ấm áp, vui vẻ và luôn tươi tắn!";
+                wishElement.innerText = "Chúc bạn có một ngày 20/11 thật vui vẻ, ngập tràn may mắn và đạt nhiều thành tích tốt!";
                 imgElement.src = "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400";
             }
 
-            showStep('step4');
+            showStep('stepFinal');
         }
 
-        // Hàm chuyển đổi giữa các bước
+        // Hàm chuyển đổi các bước
         function showStep(stepId) {
             document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
             document.getElementById(stepId).classList.add('active');
@@ -330,7 +465,7 @@
         function createFlower() {
             const flower = document.createElement('div');
             flower.classList.add('snowflake');
-            flower.innerHTML = ['🌸', '🌹', '🌷', '✨', '💖'][Math.floor(Math.random() * 5)];
+            flower.innerHTML = ['🌸', '🌹', '🌷', '✨', '💖', '💐'][Math.floor(Math.random() * 6)];
             flower.style.left = Math.random() * window.innerWidth + 'px';
             flower.style.fontSize = (Math.random() * 15 + 15) + 'px';
             
