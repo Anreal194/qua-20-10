@@ -185,6 +185,8 @@
             height: auto;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            display: block;
+            margin: 0 auto;
         }
 
         .comment-text {
@@ -220,7 +222,7 @@
             align-items: center;
         }
 
-        /* Hiệu ứng hoa rơi */
+        /* 1. Hiệu ứng hoa rơi ở các bước đầu */
         .snowflake {
             position: fixed;
             top: -10px;
@@ -244,7 +246,7 @@
             100% { transform: translateX(0px); }
         }
 
-        /* HIỆU ỨNG 100 ẢNH RƠI CHẬM RÃI TỪ TRÊN XUỐNG Ở BƯỚC CUỐI */
+        /* 2. HIỆU ỨNG ẢNH RƠI THẲNG TỪ TRÊN XUỐNG DƯỚI Ở BƯỚC CUỐI */
         .falling-photo-fullscreen {
             position: fixed;
             top: -100px;
@@ -254,7 +256,7 @@
             object-fit: cover;
             border-radius: 50%;
             border: 2px solid #ff4081;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             pointer-events: none;
             animation: fallPhotoFull linear infinite;
         }
@@ -268,7 +270,7 @@
             100% {
                 top: 105vh;
                 transform: rotate(360deg);
-                opacity: 0.3;
+                opacity: 0.2;
             }
         }
     </style>
@@ -466,7 +468,6 @@
             }
             document.querySelectorAll('.snowflake').forEach(el => el.remove());
             
-            // Hiệu ứng mờ dần card chính trước khi chuyển cảnh
             const mainCard = document.getElementById('mainCard');
             mainCard.style.opacity = '0';
             mainCard.style.transform = 'scale(0.95)';
@@ -483,14 +484,13 @@
                     wishElement.innerText = "Chúc bạn có một ngày 20/10 vô cùng ấm áp, vui vẻ và luôn tươi tắn!";
                 }
 
-                // Hiện khung quà cuối mượt mà
                 const finalStep = document.getElementById('stepFinal');
                 finalStep.style.display = 'block';
                 setTimeout(() => finalStep.classList.add('active'), 50);
 
-                // Bắt đầu hiệu ứng 100 ảnh kỷ niệm rơi chậm từ trên đỉnh xuống toàn màn hình
+                // Tạo mưa 100 ảnh rơi trực tiếp từ trên đỉnh màn hình xuống
                 if (!photoRainInterval) {
-                    photoRainInterval = setInterval(createFullscreenFallingPhoto, 900);
+                    photoRainInterval = setInterval(createFullscreenFallingPhoto, 800);
                 }
             }, 400);
         }
@@ -519,7 +519,7 @@
             }
         }
 
-        // Khởi động hoa rơi từ đầu
+        // Khởi động hoa rơi ở các bước ban đầu
         flowerInterval = setInterval(() => {
             const flower = document.createElement('div');
             flower.classList.add('snowflake');
@@ -537,12 +537,13 @@
             }, duration * 1000);
         }, 300);
 
-        // Tự động tạo mảng từ anh1.jpg đến anh100.jpg
+        // Tạo mảng tự động 100 ảnh từ anh1.jpg đến anh100.jpg
         const photoList = [];
         for (let i = 1; i <= 100; i++) {
             photoList.push(`anh${i}.jpg`);
         }
 
+        // Hàm rơi ảnh thẳng từ trên đỉnh xuống dưới
         function createFullscreenFallingPhoto() {
             const img = document.createElement('img');
             img.classList.add('falling-photo-fullscreen');
@@ -550,10 +551,9 @@
             const randomPhoto = photoList[Math.floor(Math.random() * photoList.length)];
             img.src = randomPhoto;
 
-            img.style.left = Math.random() * window.innerWidth + 'px';
+            img.style.left = Math.random() * (window.innerWidth - 70) + 'px';
 
-            // Tốc độ rơi chậm rãi lả tả từ 7 đến 11 giây
-            const duration = Math.random() * 4 + 7;
+            const duration = Math.random() * 4 + 7; // Tốc độ rơi lả tả từ 7s đến 11s
             img.style.animationDuration = duration + 's';
 
             document.body.appendChild(img);
