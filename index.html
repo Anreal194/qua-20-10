@@ -16,6 +16,7 @@
             width: 100%;
             height: 100%;
             overflow-x: hidden;
+            background: #000;
         }
 
         body {
@@ -234,13 +235,14 @@
             100% { transform: translateX(0px); }
         }
 
-        /* Giao diện 3D Galaxy (hiện ở bước cuối) */
+        /* Giao diện 3D Galaxy (Đúng chuẩn code gốc không xoá hiệu ứng) */
         #rotate-warning {
             position: fixed; left: 0; right: 0; bottom: 14px;
             display: none; text-align: center; color: #ffd6f0; font-size: 14px;
             text-shadow: 0 0 8px #ff69b4; pointer-events: none; z-index: 10;
         }
         body.portrait-mode #rotate-warning { display: block; }
+        body.intro-started #rotate-warning { opacity: 0.6; }
 
         #tap-btn, #wish-btn {
             position: fixed; left: 50%;
@@ -505,7 +507,6 @@
     </div>
 
     <script>
-        // Dữ liệu 41 học sinh
         const data = {
             1: { name: "Nguyễn Hoàng Gia An", wish: "Chúc bạn Nguyễn Hoàng Gia An luôn mạnh mẽ, học tập thật đỉnh, luôn giữ vững phong độ và gặt hái thật nhiều thành công nhé! 💪🔥" },
             2: { name: "Nguyễn Trâm Anh", wish: "Chúc bạn Nguyễn Trâm Anh một ngày 20/10 thật nhiều hoa, quà và nụ cười rạng rỡ!" },
@@ -680,7 +681,6 @@
             setTimeout(() => {
                 mainCard.style.display = 'none';
                 document.getElementById('container').style.display = 'block';
-                // Khởi động không gian 3D thiên hà
                 initGalaxySpace();
             }, 500);
         }
@@ -708,12 +708,18 @@
         }
     </script>
 
-    <!-- Script chạy không gian 3D Thiên Hà (Three.js) -->
+    <!-- Script 3D Thiên Hà gốc tích hợp sẵn 100 ảnh từ GitHub -->
     <script type="module">
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
         window.initGalaxySpace = function() {
+            // Tự động tạo mảng 100 ảnh từ anh1.jpg đến anh100.jpg trên GitHub của bạn
+            const dynamicImages = [];
+            for (let i = 1; i <= 100; i++) {
+                dynamicImages.push(`anh${i}.jpg`);
+            }
+
             const CONFIG = {
                 ringTexts: [
                     'CHÚC MỪNG 20/10',
@@ -721,13 +727,7 @@
                     'TẬP THỂ LỚP TUYỆT VỜI',
                     'NAMDEX GALAXY'
                 ],
-                images: [
-                    'https://raw.githubusercontent.com/namdexVND/VNDhinhanh/refs/heads/main/004f2e204a0aa6c5c7c9c6c8ffea082d.jpg',
-                    'https://raw.githubusercontent.com/namdexVND/VNDhinhanh/refs/heads/main/bdddc4d3081f70a27b8387757cbb4523.jpg',
-                    'https://raw.githubusercontent.com/namdexVND/VNDhinhanh/refs/heads/main/images%20(12).jpeg',
-                    'https://raw.githubusercontent.com/namdexVND/VNDhinhanh/refs/heads/main/images%20(14).jpeg',
-                    'https://raw.githubusercontent.com/namdexVND/VNDhinhanh/refs/heads/main/images%20(15).jpeg'
-                ],
+                images: dynamicImages,
                 music: '',
                 hintText: 'Chạm Vào Tinh Cầu',
                 texts: {
@@ -738,15 +738,8 @@
                 letter: {
                     title: 'Lời Chúc 20/10 ♡',
                     text: `Gửi bạn ${chosenStudentName},\n\n${chosenStudentWish}\n\nChúc bạn luôn rạng rỡ, ngập tràn niềm vui và gặt hái thật nhiều thành công trong cuộc sống!\n\n— Gửi từ tập thể lớp`
-                },
-                holdAfterName2: 5,
-                nameDelay: 3
+                }
             };
-
-            const EXTRA = (window.dataCCD && window.dataCCD.data) || {};
-            const ringTexts = [...CONFIG.ringTexts, ...(EXTRA.ringTexts || [])];
-            let heartImages = [...(EXTRA.heartImages || []), ...CONFIG.images];
-            if (heartImages.length === 0) heartImages = Array(9).fill(null);
 
             const scene = new THREE.Scene();
             scene.fog = new THREE.FogExp2(0x000000, 0.0015);
@@ -808,12 +801,13 @@
             }
 
             const galaxyParameters = { count: 100000, arms: 6, radius: 100, spin: 0.5, randomness: 0.2, randomnessPower: 20, insideColor: new THREE.Color(0xd63ed6), outsideColor: new THREE.Color(0x48b8b8) };
+            const heartImages = CONFIG.images;
             const numGroups = heartImages.length;
             const photoMode = heartImages.some(Boolean);
             const photoGroups = [];
             let photoReveal = 0, photoRevealTarget = 0, photosRevealed = false;
             const photoSmall = Math.min(window.innerWidth, window.innerHeight) < 700;
-            const photoPerGroup = photoSmall ? 40 : 70;
+            const photoPerGroup = photoSmall ? 15 : 25;
             const photoSize = photoSmall ? 10 : 11;
 
             const positions = new Float32Array(galaxyParameters.count * 3);
@@ -888,22 +882,19 @@
                 img.src = src;
             }
 
-            const heartObjects = [];
             for (let group = 0; group < numGroups; group++) {
-                const nPts = photoMode ? photoPerGroup : 1000;
-                const gPos = new Float32Array(nPts * 3), gColNear = new Float32Array(nPts * 3), gColFar = new Float32Array(nPts * 3);
+                const nPts = photoPerGroup;
+                const gPos = new Float32Array(nPts * 3);
                 let valid = 0;
                 for (let i = 0; i < nPts; i++) {
-                    const radius = photoMode ? 32 + Math.pow(Math.random(), 1.1) * 62 : Math.pow(Math.random(), galaxyParameters.randomnessPower) * galaxyParameters.radius;
-                    if (radius < 30) continue;
+                    const radius = 32 + Math.pow(Math.random(), 1.1) * 62;
                     const totalAngle = ((group * nPts + i) % galaxyParameters.arms) / galaxyParameters.arms * Math.PI * 2 + radius * galaxyParameters.spin;
                     const idx = valid * 3;
-                    gPos[idx] = Math.cos(totalAngle) * radius; gPos[idx + 1] = (Math.random() - 0.5) * 10; gPos[idx + 2] = Math.sin(totalAngle) * radius;
-                    gColNear[idx] = gColNear[idx + 1] = gColNear[idx + 2] = 1;
-                    gColFar[idx] = 1; gColFar[idx + 1] = 0.4; gColFar[idx + 2] = 0.8;
+                    gPos[idx] = Math.cos(totalAngle) * radius; 
+                    gPos[idx + 1] = (Math.random() - 0.5) * 10; 
+                    gPos[idx + 2] = Math.sin(totalAngle) * radius;
                     valid++;
                 }
-                if (valid === 0) continue;
                 let cx = 0, cy = 0, cz = 0;
                 for (let i = 0; i < valid; i++) { cx += gPos[i * 3]; cy += gPos[i * 3 + 1]; cz += gPos[i * 3 + 2]; }
                 cx /= valid; cy /= valid; cz /= valid;
@@ -913,13 +904,11 @@
                 geoNear.translate(-cx, -cy, -cz);
 
                 loadHeartTexture(heartImages[group], texture => {
-                    if (photoMode) {
-                        const mat = new THREE.PointsMaterial({ size: photoSize, map: texture, transparent: true, opacity: 0, alphaTest: 0.12, depthWrite: false, blending: THREE.NormalBlending });
-                        const pts = new THREE.Points(geoNear, mat);
-                        pts.position.set(cx, cy, cz); pts.visible = false;
-                        scene.add(pts);
-                        photoGroups.push({ mat, pts });
-                    }
+                    const mat = new THREE.PointsMaterial({ size: photoSize, map: texture, transparent: true, opacity: 0, alphaTest: 0.12, depthWrite: false, blending: THREE.NormalBlending });
+                    const pts = new THREE.Points(geoNear, mat);
+                    pts.position.set(cx, cy, cz); pts.visible = false;
+                    scene.add(pts);
+                    photoGroups.push({ mat, pts });
                 });
             }
 
@@ -953,7 +942,7 @@
             const planet = new THREE.Mesh(new THREE.SphereGeometry(planetRadius, 48, 48), planetMaterial);
             scene.add(planet);
 
-            // Các vòng chữ quay quanh hành tinh
+            // Vòng chữ quay quanh hành tinh
             const textRings = [];
             function createRingTexture(text, ringRadius) {
                 const canvas = document.createElement('canvas');
@@ -977,7 +966,7 @@
                 );
                 const group = new THREE.Group();
                 group.add(mesh);
-                group.userData = { angleOffset: i, speed: 0.002, baseRotX: (i / CONFIG.ringTexts.length) * Math.PI };
+                group.userData = { angleOffset: i, speed: 0.002 };
                 scene.add(group);
                 textRings.push(group);
             });
@@ -1074,8 +1063,6 @@
                 curMix = 0; targetMix = 1;
             }
 
-            // Kịch bản bấm tinh cầu
-            const tapBtn = document.getElementById('tap-btn');
             function startSceneSequence() {
                 particles.visible = true;
                 setBuffer(stateCloud, stateName);
@@ -1090,11 +1077,12 @@
                     setTimeout(() => {
                         document.getElementById('letter-icon').classList.add('show');
                         document.getElementById('wish-btn').classList.add('show');
+                        photoRevealTarget = 1;
                     }, 3000);
                 }, 5000);
             }
 
-            // Xử lý click chọn tinh cầu
+            // Click chọn tinh cầu để bắt đầu
             const raycaster = new THREE.Raycaster();
             const mouse = new THREE.Vector2();
             window.addEventListener('pointerdown', e => {
@@ -1114,25 +1102,23 @@
                 }
             });
 
-            // Ảnh bay lên vòng lặp
+            // Ảnh bay lên vòng lặp (100 ảnh từ GitHub)
             const riseBox = document.getElementById('photo-rise');
             function startPhotoRise() {
-                const srcs = heartImages.filter(Boolean);
-                if (!srcs.length) return;
                 setInterval(() => {
-                    if (riseBox.childElementCount < 8) {
+                    if (riseBox.childElementCount < 10) {
                         const card = document.createElement('div');
                         card.className = 'pr-card';
                         const wv = 15, hv = 18, x = Math.random() * 70, dur = 15;
                         card.style.cssText = `left:${x}vw;width:${wv}vw;height:${hv}vw;--dur:${dur}s;--sc:1;--op:0.9;--sw:2vw;--r0:0deg;--r1:0deg;--sd:0s;`;
                         const img = new Image();
-                        img.src = srcs[Math.floor(Math.random() * srcs.length)];
+                        img.src = heartImages[Math.floor(Math.random() * heartImages.length)];
                         img.onerror = () => { const fb = document.createElement('div'); fb.className = 'pr-fallback'; fb.textContent = '♥'; img.replaceWith(fb); };
                         card.appendChild(img);
                         card.addEventListener('animationend', () => card.remove());
                         riseBox.appendChild(card);
                     }
-                }, 1500);
+                }, 1200);
             }
 
             // Thư điện ảnh
@@ -1185,10 +1171,20 @@
                 planetMaterial.uniforms.time.value = time * 0.5;
                 planet.lookAt(camera.position);
 
-                textRings.forEach((rg, idx) => {
-                    rg.userData.angleOffset += rg.userData.speed;
+                // Hiệu ứng xoay vòng chữ quanh hành tinh
+                textRings.forEach((rg) => {
+                    rg.userData.angleOffset += 0.002;
                     rg.rotation.y = rg.userData.angleOffset;
                 });
+
+                // Hiệu ứng hiện ảnh thiên hà 3D mượt mà
+                if (photoRevealTarget > 0) {
+                    photoReveal += (photoRevealTarget - photoReveal) * 0.022;
+                    photoGroups.forEach(g => {
+                        g.mat.opacity = photoReveal;
+                        g.pts.visible = photoReveal > 0.01;
+                    });
+                }
 
                 if (introStarted && fadeOpacity < 1) fadeOpacity = Math.min(1, fadeOpacity + 0.025);
                 renderer.render(scene, camera);
