@@ -24,10 +24,10 @@
 
         .card {
             background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
+            padding: 25px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            max-width: 480px;
+            max-width: 500px;
             width: 100%;
             text-align: center;
             animation: fadeIn 0.5s ease-in-out;
@@ -52,7 +52,7 @@
             margin: 20px 0;
         }
 
-        input[type="number"], input[type="text"] {
+        input[type="number"] {
             padding: 12px;
             font-size: 16px;
             width: 80%;
@@ -117,17 +117,39 @@
 
         .gift-box {
             background: #fff0f5;
-            padding: 20px;
+            padding: 15px;
             border-radius: 15px;
             border: 2px dashed #ff4081;
-            margin-top: 15px;
+            margin-top: 10px;
+        }
+
+        /* HIỆU ỨNG CHẠY CHỮ TRÊN ẢNH */
+        .running-text-container {
+            overflow: hidden;
+            white-space: nowrap;
+            background: rgba(255, 192, 203, 0.3);
+            border-radius: 8px;
+            padding: 8px 0;
+            margin-bottom: 10px;
+        }
+
+        .running-text {
+            display: inline-block;
+            animation: marquee 12s linear infinite;
+            color: #d81b60;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
         }
 
         .gift-box img {
             max-width: 100%;
             height: auto;
             border-radius: 12px;
-            margin-top: 15px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
@@ -145,7 +167,6 @@
             font-weight: bold;
         }
 
-        /* Nút bật/tắt nhạc nổi ở góc màn hình */
         #musicBtn {
             position: fixed;
             top: 20px;
@@ -165,7 +186,6 @@
             align-items: center;
         }
 
-        /* Hiệu ứng hoa rơi */
         .snowflake {
             position: fixed;
             top: -10px;
@@ -197,16 +217,14 @@
 </head>
 <body>
 
-    <!-- THẺ PHÁT NHẠC -->
     <audio id="bgMusic" loop>
         <source src="nhac.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- NÚT BẬT/TẮT NHẠC NỔI GÓC TRÊN -->
     <button id="musicBtn" onclick="toggleMusic()">🎵</button>
 
     <div class="card">
-        <!-- BƯỚC 1: Hỏi Số -->
+        <!-- BƯỚC 1 -->
         <div id="step1" class="step active">
             <h2>🌸 Chào Bạn! 🌸</h2>
             <p>Cho mình hỏi bạn mang số bao nhiêu thế? (Nhập từ 1 đến 41):</p>
@@ -216,7 +234,7 @@
             <button onclick="goToStep2()">Tiếp tục ➡️</button>
         </div>
 
-        <!-- BƯỚC 2: Hỏi Hôm Nay Là Ngày Gì -->
+        <!-- BƯỚC 2 -->
         <div id="step2" class="step">
             <h2>❓ Đố Bạn Biết</h2>
             <p>Bạn có biết hôm nay là ngày gì không ta?</p>
@@ -226,7 +244,7 @@
             </div>
         </div>
 
-        <!-- BƯỚC 3: Hỏi Xác Nhận Tên -->
+        <!-- BƯỚC 3 -->
         <div id="step3" class="step">
             <h2>✨ Xác Nhận Tên ✨</h2>
             <p id="commentDay" class="comment-text"></p>
@@ -236,129 +254,85 @@
             </div>
         </div>
 
-        <!-- BƯỚC 4: 5 CÂU HỎI TRẮC NGHIỆM ĐÚNG / SAI -->
+        <!-- BƯỚC 4: 5 CÂU HỎI TRẮC NGHIỆM -->
         <div id="stepQuiz" class="step">
             <div id="quizProgress" class="progress-text">Câu hỏi 1 / 5</div>
             <h2 id="quizQuestion">Nội dung câu hỏi...</h2>
             <p id="quizFeedback" style="color: #ff1744; font-weight: bold; min-height: 24px; margin-bottom: 10px;"></p>
-            <div id="quizOptions" class="btn-group">
-                <!-- Các lựa chọn sẽ tự động sinh ra ở đây -->
-            </div>
+            <div id="quizOptions" class="btn-group"></div>
         </div>
 
-        <!-- BƯỚC 5: Hiển Thị Lời Chúc & Hình Ảnh -->
+        <!-- BƯỚC 5: HIỂN THỊ KẾT QUẢ & ẢNH LỚP KÈM CHỮ CHẠY -->
         <div id="stepFinal" class="step">
             <h2>🎁 Quà 20/10 Dành Cho Bạn 🎁</h2>
             <div class="gift-box">
-                <p id="finalWish" style="font-size: 17px; color: #333; font-weight: bold;"></p>
-                <img id="finalImg" src="" alt="Hình ảnh lời chúc 20/10">
+                <!-- PHẦN CHỮ CHẠY TRÊN ẢNH LỚP -->
+                <div class="running-text-container">
+                    <div class="running-text">🌟 Chúc mừng 20/10 tập thể lớp tuyệt vời nhất! Luôn đoàn kết, vui vẻ và rạng rỡ bên nhau nhé! 💖</div>
+                </div>
+                <p id="finalWish" style="font-size: 15px; color: #333; font-weight: bold; margin-bottom: 10px;"></p>
+                <!-- HIỂN THỊ ẢNH LỚP -->
+                <img id="finalImg" src="lop.jpg" alt="Ảnh tập thể lớp">
             </div>
         </div>
     </div>
 
     <script>
-        // =========================================================
-        // DANH SÁCH 41 HỌC SINH ĐẦY ĐỦ
-        // =========================================================
         const data = {
-            1: { name: "Nguyễn Hoàng Gia An", wish: "Chúc bạn Nguyễn Hoàng Gia An (sinh ngày 18/11/2009) luôn xinh đẹp, tự tin, học giỏi và ngập tràn hạnh phúc trong ngày 20/10 nhé!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
-            2: { name: "Nguyễn Trâm Anh", wish: "Chúc bạn Nguyễn Trâm Anh (sinh ngày 25/05/2009) một ngày 20/10 thật nhiều hoa, quà và nụ cười rạng rỡ!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
-            3: { name: "Trương Thị Phương Anh", wish: "Chúc bạn Trương Thị Phương Anh (sinh ngày 01/01/2009) luôn tươi trẻ, tràn đầy năng lượng và đạt được mọi ước mơ!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
-            4: { name: "Trần Xuân Việt Bách", wish: "Chúc bạn Trần Xuân Việt Bách (sinh ngày 28/08/2009) luôn vui vẻ, học tập thật tốt và gặt hái nhiều thành công!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
-            5: { name: "Nguyễn Ngọc Bảo Chi", wish: "Chúc bạn Nguyễn Ngọc Bảo Chi (sinh ngày 10/07/2009) ngày 20/10 ngập tràn niềm vui, luôn là cô gái đáng yêu và tỏa sáng!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
-            6: { name: "Bùi Thị Thùy Dương", wish: "Chúc bạn Bùi Thị Thùy Dương (sinh ngày 02/01/2009) luôn luôn vui tươi, gặp nhiều may mắn và hạnh phúc trong cuộc sống!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
-            7: { name: "Lê Phương Đan", wish: "Chúc bạn Lê Phương Đan (sinh ngày 24/09/2009) một ngày 20/10 thật ý nghĩa, luôn tự tin và thành công trên con đường học tập!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
-            8: { name: "Nguyễn Thành Đạt", wish: "Chúc bạn Nguyễn Thành Đạt (sinh ngày 10/05/2009) luôn tràn đầy năng lượng, đạt kết quả cao trong học tập và mọi việc như ý!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
-            9: { name: "Cao Hải Đăng", wish: "Chúc bạn Cao Hải Đăng (sinh ngày 10/10/2009) luôn giữ vững phong độ, học giỏi và luôn vui vẻ mỗi ngày!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
-            10: { name: "Nguyễn Hoàng Trúc Giang", wish: "Chúc bạn Nguyễn Hoàng Trúc Giang (sinh ngày 21/09/2009) luôn xinh tươi, rạng rỡ và có một ngày 20/10 thật tuyệt vời!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
-            11: { name: "Nguyễn Ngọc Vân Hà", wish: "Chúc bạn Nguyễn Ngọc Vân Hà (sinh ngày 30/01/2009) luôn hạnh phúc, gặp nhiều may mắn và gặt hái thật nhiều điểm 10!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
-            12: { name: "Nguyễn Trần Gia Hân", wish: "Chúc bạn Nguyễn Trần Gia Hân (sinh ngày 29/09/2009) luôn vui vẻ, đáng yêu và gặt hái được nhiều thành công trong học tập!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
-            13: { name: "Trịnh Đình Thư Kỳ", wish: "Chúc bạn Trịnh Đình Thư Kỳ (sinh ngày 08/03/2009) luôn tràn đầy năng lượng tích cực và có một ngày 20/10 trọn vẹn niềm vui!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
-            14: { name: "Điện Thảo Linh", wish: "Chúc bạn Điện Thảo Linh (sinh ngày 16/03/2009) luôn xinh đẹp, giỏi giang và có thật nhiều kỷ niệm đẹp trong năm học này nhé!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
-            15: { name: "Lê Thị Mai Linh", wish: "Chúc bạn Lê Thị Mai Linh (sinh ngày 02/10/2009) luôn vui tươi, trẻ trung và đạt được mọi mục tiêu mà mình mong muốn!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
-            16: { name: "Hồ Trúc Ly", wish: "Chúc bạn Hồ Trúc Ly (sinh ngày 07/04/2009) một ngày 20/10 ngập tràn quà bánh, hoa tươi và luôn mỉm cười rạng rỡ!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
-            17: { name: "Nguyễn Thiều Trà My", wish: "Chúc bạn Nguyễn Thiều Trà My (sinh ngày 07/11/2009) luôn tự tin, học giỏi và luôn là người truyền năng lượng tích cực đến mọi người!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
-            18: { name: "Võ Ngọc Trà My", wish: "Chúc bạn Võ Ngọc Trà My (sinh ngày 24/09/2009) ngày 20/10 thật ý nghĩa, luôn xinh xắn và đạt thành tích cao trong học tập!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
-            19: { name: "Đỗ Thanh Ngọc", wish: "Chúc bạn Đỗ Thanh Ngọc (sinh ngày 10/02/2009) luôn vui vẻ, bình an và gặt hái được thật nhiều thành công rực rỡ!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
-            20: { name: "Phạm Lữ Nguyên Ngọc", wish: "Chúc bạn Phạm Lữ Nguyên Ngọc (sinh ngày 17/08/2009) luôn tỏa sáng, học tập tốt và có một ngày 20/10 thật đáng nhớ!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
-            21: { name: "Lê Uyên Nhi", wish: "Chúc bạn Lê Uyên Nhi (sinh ngày 30/05/2009) luôn xinh đẹp, ngọt ngào và đạt được mọi ước mơ trong tương lai!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
-            22: { name: "Ngô Thị Yến Nhi", wish: "Chúc bạn Ngô Thị Yến Nhi (sinh ngày 29/01/2009) luôn giữ được nụ cười tươi tắn, học giỏi và luôn gặp nhiều may mắn!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
-            23: { name: "Trần Lê Yến Nhi", wish: "Chúc bạn Trần Lê Yến Nhi (sinh ngày 17/08/2009) ngày 20/10 ngập tràn niềm vui, luôn tự tin và thành công trên mọi con đường!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
-            24: { name: "Nguyễn Ngọc Minh Phương", wish: "Chúc bạn Nguyễn Ngọc Minh Phương (sinh ngày 22/10/2009) luôn thông minh, xinh xắn và có một mùa 20/10 thật hạnh phúc!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
-            25: { name: "Nguyễn Đắc Khánh Quỳnh", wish: "Chúc bạn Nguyễn Đắc Khánh Quỳnh (sinh ngày 15/11/2009) luôn vui tươi, tràn đầy sức sống và đạt kết quả cao trong học tập!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
-            26: { name: "Bùi Đỗ Phương Thúy", wish: "Chúc bạn Bùi Đỗ Phương Thúy (sinh ngày 10/12/2009) luôn xinh đẹp, giỏi giang và gặt hái được thật nhiều thành tựu mới!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
-            27: { name: "Bùi Ngọc Anh Thư", wish: "Chúc bạn Bùi Ngọc Anh Thư (sinh ngày 21/05/2009) luôn rạng rỡ, đáng yêu và có một ngày 20/10 tràn ngập yêu thương!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
-            28: { name: "Lê Nguyễn Anh Thư", wish: "Chúc bạn Lê Nguyễn Anh Thư (sinh ngày 27/03/2009) luôn giữ vững tinh thần học tập hăng say và luôn vui vẻ mỗi ngày!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
-            29: { name: "Phan Hoàng Minh Thư", wish: "Chúc bạn Phan Hoàng Minh Thư (sinh ngày 14/02/2009) ngày 20/10 thật trọn vẹn, luôn tự tin và gặt hái nhiều điểm tốt!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
-            30: { name: "Phạm Trần Hoài Thương", wish: "Chúc bạn Phạm Trần Hoài Thương (sinh ngày 29/03/2009) luôn ấm áp, được yêu thương nhiều hơn và thành công trong cuộc sống!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
-            31: { name: "Phạm Lê Bảo Thy", wish: "Chúc bạn Phạm Lê Bảo Thy (sinh ngày 21/07/2009) luôn xinh xắn, năng động và luôn đạt kết quả xuất sắc trong học tập!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
-            32: { name: "Nguyễn Thị Thủy Tiên", wish: "Chúc bạn Nguyễn Thị Thủy Tiên (sinh ngày 06/10/2009) luôn rạng rỡ như đóa hoa tiên, gặp nhiều may mắn và luôn vui vẻ!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
-            33: { name: "Nguyễn Trần Thiên Trang", wish: "Chúc bạn Nguyễn Trần Thiên Trang (sinh ngày 02/03/2009) luôn duyên dáng, học giỏi và có một ngày 20/10 thật đáng nhớ!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
-            34: { name: "Ngô Thùy Trâm", wish: "Chúc bạn Ngô Thùy Trâm (sinh ngày 06/04/2009) luôn tràn đầy năng lượng, tự tin và đạt được mọi hoài bão của mình!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
-            35: { name: "Nguyễn Ngọc Nhã Trúc", wish: "Chúc bạn Nguyễn Ngọc Nhã Trúc (sinh ngày 05/05/2009) luôn dịu dàng, đáng yêu và gặt hái thật nhiều thành công!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
-            36: { name: "Mai Phạm Bảo Uyên", wish: "Chúc bạn Mai Phạm Bảo Uyên (sinh ngày 08/12/2009) luôn vui tươi, gặp nhiều điều tốt đẹp và luôn là niềm tự hào của mọi người!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
-            37: { name: "Đặng Nguyễn Tường Vi", wish: "Chúc bạn Đặng Nguyễn Tường Vi (sinh ngày 27/07/2009) luôn tươi vui như đóa hoa tường vi, học giỏi và luôn hạnh phúc!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
-            38: { name: "Nguyễn Thị Tường Vi", wish: "Chúc bạn Nguyễn Thị Tường Vi (sinh ngày 13/09/2009) một ngày 20/10 ngập tràn niềm vui, luôn tự tin và đạt thành tích cao!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
-            39: { name: "Lý Hữu Triệu Vinh", wish: "Chúc bạn Lý Hữu Triệu Vinh (sinh ngày 06/10/2009) luôn mạnh mẽ, học tập tiến bộ và đạt được mọi mục tiêu đề ra!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
-            40: { name: "Nguyễn Ngọc Tường Vy", wish: "Chúc bạn Nguyễn Ngọc Tường Vy (sinh ngày 30/01/2009) luôn xinh đẹp, rạng ngời và có một ngày lễ 20/10 tuyệt vời nhất!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
-            41: { name: "Trần Như Ý", wish: "Chúc bạn Trần Như Ý (sinh ngày 22/03/2009) vạn sự như ý, luôn vui vẻ, học giỏi và gặt hái nhiều thành công trong cuộc sống!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" }
+            1: { name: "Nguyễn Hoàng Gia An", wish: "Chúc bạn Nguyễn Hoàng Gia An luôn xinh đẹp, tự tin, học giỏi và ngập tràn hạnh phúc trong ngày 20/10 nhé!" },
+            2: { name: "Nguyễn Trâm Anh", wish: "Chúc bạn Nguyễn Trâm Anh một ngày 20/10 thật nhiều hoa, quà và nụ cười rạng rỡ!" },
+            3: { name: "Trương Thị Phương Anh", wish: "Chúc bạn Trương Thị Phương Anh luôn tươi trẻ, tràn đầy năng lượng và đạt được mọi ước mơ!" },
+            4: { name: "Trần Xuân Việt Bách", wish: "Chúc bạn Trần Xuân Việt Bách luôn vui vẻ, học tập thật tốt và gặt hái nhiều thành công!" },
+            5: { name: "Nguyễn Ngọc Bảo Chi", wish: "Chúc bạn Nguyễn Ngọc Bảo Chi ngày 20/10 ngập tràn niềm vui, luôn là cô gái đáng yêu và tỏa sáng!" },
+            6: { name: "Bùi Thị Thùy Dương", wish: "Chúc bạn Bùi Thị Thùy Dương luôn luôn vui tươi, gặp nhiều may mắn và hạnh phúc trong cuộc sống!" },
+            7: { name: "Lê Phương Đan", wish: "Chúc bạn Lê Phương Đan một ngày 20/10 thật ý nghĩa, luôn tự tin và thành công trên con đường học tập!" },
+            8: { name: "Nguyễn Thành Đạt", wish: "Chúc bạn Nguyễn Thành Đạt luôn tràn đầy năng lượng, đạt kết quả cao trong học tập và mọi việc như ý!" },
+            9: { name: "Cao Hải Đăng", wish: "Chúc bạn Cao Hải Đăng luôn giữ vững phong độ, học giỏi và luôn vui vẻ mỗi ngày!" },
+            10: { name: "Nguyễn Hoàng Trúc Giang", wish: "Chúc bạn Nguyễn Hoàng Trúc Giang luôn xinh tươi, rạng rỡ và có một ngày 20/10 thật tuyệt vời!" },
+            11: { name: "Nguyễn Ngọc Vân Hà", wish: "Chúc bạn Nguyễn Ngọc Vân Hà luôn hạnh phúc, gặp nhiều may mắn và gặt hái thật nhiều điểm 10!" },
+            12: { name: "Nguyễn Trần Gia Hân", wish: "Chúc bạn Nguyễn Trần Gia Hân luôn vui vẻ, đáng yêu và gặt hái được nhiều thành công trong học tập!" },
+            13: { name: "Trịnh Đình Thư Kỳ", wish: "Chúc bạn Trịnh Đình Thư Kỳ luôn tràn đầy năng lượng tích cực và có một ngày 20/10 trọn vẹn niềm vui!" },
+            14: { name: "Điện Thảo Linh", wish: "Chúc bạn Điện Thảo Linh luôn xinh đẹp, giỏi giang và có thật nhiều kỷ niệm đẹp trong năm học này nhé!" },
+            15: { name: "Lê Thị Mai Linh", wish: "Chúc bạn Lê Thị Mai Linh luôn vui tươi, trẻ trung và đạt được mọi mục tiêu mà mình mong muốn!" },
+            16: { name: "Hồ Trúc Ly", wish: "Chúc bạn Hồ Trúc Ly một ngày 20/10 ngập tràn quà bánh, hoa tươi và luôn mỉm cười rạng rỡ!" },
+            17: { name: "Nguyễn Thiều Trà My", wish: "Chúc bạn Nguyễn Thiều Trà My luôn tự tin, học giỏi và luôn là người truyền năng lượng tích cực đến mọi người!" },
+            18: { name: "Võ Ngọc Trà My", wish: "Chúc bạn Võ Ngọc Trà My ngày 20/10 thật ý nghĩa, luôn xinh xắn và đạt thành tích cao trong học tập!" },
+            19: { name: "Đỗ Thanh Ngọc", wish: "Chúc bạn Đỗ Thanh Ngọc luôn vui vẻ, bình an và gặt hái được thật nhiều thành công rực rỡ!" },
+            20: { name: "Phạm Lữ Nguyên Ngọc", wish: "Chúc bạn Phạm Lữ Nguyên Ngọc luôn tỏa sáng, học tập tốt và có một ngày 20/10 thật đáng nhớ!" },
+            21: { name: "Lê Uyên Nhi", wish: "Chúc bạn Lê Uyên Nhi luôn xinh đẹp, ngọt ngào và đạt được mọi ước mơ trong tương lai!" },
+            22: { name: "Ngô Thị Yến Nhi", wish: "Chúc bạn Ngô Thị Yến Nhi luôn giữ được nụ cười tươi tắn, học giỏi và luôn gặp nhiều may mắn!" },
+            23: { name: "Trần Lê Yến Nhi", wish: "Chúc bạn Trần Lê Yến Nhi ngày 20/10 ngập tràn niềm vui, luôn tự tin và thành công trên mọi con đường!" },
+            24: { name: "Nguyễn Ngọc Minh Phương", wish: "Chúc bạn Nguyễn Ngọc Minh Phương luôn thông minh, xinh xắn và có một mùa 20/10 thật hạnh phúc!" },
+            25: { name: "Nguyễn Đắc Khánh Quỳnh", wish: "Chúc bạn Nguyễn Đắc Khánh Quỳnh luôn vui tươi, tràn đầy sức sống và đạt kết quả cao trong học tập!" },
+            26: { name: "Bùi Đỗ Phương Thúy", wish: "Chúc bạn Bùi Đỗ Phương Thúy luôn xinh đẹp, giỏi giang và gặt hái được thật nhiều thành tựu mới!" },
+            27: { name: "Bùi Ngọc Anh Thư", wish: "Chúc bạn Bùi Ngọc Anh Thư luôn rạng rỡ, đáng yêu và có một ngày 20/10 tràn ngập yêu thương!" },
+            28: { name: "Lê Nguyễn Anh Thư", wish: "Chúc bạn Lê Nguyễn Anh Thư luôn giữ vững tinh thần học tập hăng say và luôn vui vẻ mỗi ngày!" },
+            29: { name: "Phan Hoàng Minh Thư", wish: "Chúc bạn Phan Hoàng Minh Thư ngày 20/10 thật trọn vẹn, luôn tự tin và gặt hái nhiều điểm tốt!" },
+            30: { name: "Phạm Trần Hoài Thương", wish: "Chúc bạn Phạm Trần Hoài Thương luôn ấm áp, được yêu thương nhiều hơn và thành công trong cuộc sống!" },
+            31: { name: "Phạm Lê Bảo Thy", wish: "Chúc bạn Phạm Lê Bảo Thy luôn xinh xắn, năng động và luôn đạt kết quả xuất sắc trong học tập!" },
+            32: { name: "Nguyễn Thị Thủy Tiên", wish: "Chúc bạn Nguyễn Thị Thủy Tiên luôn rạng rỡ như đóa hoa tiên, gặp nhiều may mắn và luôn vui vẻ!" },
+            33: { name: "Nguyễn Trần Thiên Trang", wish: "Chúc bạn Nguyễn Trần Thiên Trang luôn duyên dáng, học giỏi và có một ngày 20/10 thật đáng nhớ!" },
+            34: { name: "Ngô Thùy Trâm", wish: "Chúc bạn Ngô Thùy Trâm luôn tràn đầy năng lượng, tự tin và đạt được mọi hoài bão của mình!" },
+            35: { name: "Nguyễn Ngọc Nhã Trúc", wish: "Chúc bạn Nguyễn Ngọc Nhã Trúc luôn dịu dàng, đáng yêu và gặt hái thật nhiều thành công!" },
+            36: { name: "Mai Phạm Bảo Uyên", wish: "Chúc bạn Mai Phạm Bảo Uyên luôn vui tươi, gặp nhiều điều tốt đẹp và luôn là niềm tự hào của mọi người!" },
+            37: { name: "Đặng Nguyễn Tường Vi", wish: "Chúc bạn Đặng Nguyễn Tường Vi luôn tươi vui như đóa hoa tường vi, học giỏi và luôn hạnh phúc!" },
+            38: { name: "Nguyễn Thị Tường Vi", wish: "Chúc bạn Nguyễn Thị Tường Vi một ngày 20/10 ngập tràn niềm vui, luôn tự tin và đạt thành tích cao!" },
+            39: { name: "Lý Hữu Triệu Vinh", wish: "Chúc bạn Lý Hữu Triệu Vinh luôn mạnh mẽ, học tập tiến bộ và đạt được mọi mục tiêu đề ra!" },
+            40: { name: "Nguyễn Ngọc Tường Vy", wish: "Chúc bạn Nguyễn Ngọc Tường Vy luôn xinh đẹp, rạng ngời và có một ngày lễ 20/10 tuyệt vời nhất!" },
+            41: { name: "Trần Như Ý", wish: "Chúc bạn Trần Như Ý vạn sự như ý, luôn vui vẻ, học giỏi và gặt hái nhiều thành công trong cuộc sống!" }
         };
 
-        // =========================================================
-        // BỘ 5 CÂU HỎI TRẮC NGHIỆM VỀ 20/10
-        // =========================================================
         const questions = [
-            {
-                q: "1. Ngày 20/10 ở Việt Nam là kỷ niệm ngày gì?",
-                options: [
-                    "A. Ngày Phụ nữ Việt Nam 🌸",
-                    "B. Ngày Nhà giáo Việt Nam",
-                    "C. Ngày Quốc tế Phụ nữ"
-                ],
-                correctAnswer: 0
-            },
-            {
-                q: "2. Loài hoa nào thường được tặng nhiều nhất vào ngày 20/10?",
-                options: [
-                    "A. Hoa cúc trắng",
-                    "B. Hoa hồng và hoa hướng dương 🌹",
-                    "C. Hoa sen đá"
-                ],
-                correctAnswer: 1
-            },
-            {
-                q: "3. Món quà lớn nhất dành cho các bạn trong ngày 20/10 là gì?",
-                options: [
-                    "A. Nụ cười và sự quan tâm chân thành 🥰",
-                    "B. Bị phạt chạy 5 vòng sân",
-                    "C. Làm bài kiểm tra 1 tiết"
-                ],
-                correctAnswer: 0
-            },
-            {
-                q: "4. Phụ nữ Việt Nam được ví với phẩm chất cao đẹp nào?",
-                options: [
-                    "A. Anh hùng, bất khuất, trung hậu, đảm đang 🌟",
-                    "B. Chăm chỉ ngủ nướng",
-                    "C. Thích ăn vặt cả ngày"
-                ],
-                correctAnswer: 0
-            },
-            {
-                q: "5. Bạn đã sẵn sàng nhận món quà bí mật ngày 20/10 chưa?",
-                options: [
-                    "A. Sẵn sàng lắm rồi, mở quà thôi! 🎁",
-                    "B. Chưa muốn nhận lắm",
-                    "C. Thôi ngại lắm"
-                ],
-                correctAnswer: 0
-            }
+            { q: "1. Ngày 20/10 ở Việt Nam là kỷ niệm ngày gì?", options: ["A. Ngày Phụ nữ Việt Nam 🌸", "B. Ngày Nhà giáo Việt Nam", "C. Ngày Quốc tế Phụ nữ"], correctAnswer: 0 },
+            { q: "2. Loài hoa nào thường được tặng nhiều nhất vào ngày 20/10?", options: ["A. Hoa cúc trắng", "B. Hoa hồng và hoa hướng dương 🌹", "C. Hoa sen đá"], correctAnswer: 1 },
+            { q: "3. Món quà lớn nhất dành cho các bạn trong ngày 20/10 là gì?", options: ["A. Nụ cười và sự quan tâm chân thành 🥰", "B. Bị phạt chạy 5 vòng sân", "C. Làm bài kiểm tra 1 tiết"], correctAnswer: 0 },
+            { q: "4. Phụ nữ Việt Nam được ví với phẩm chất cao đẹp nào?", options: ["A. Anh hùng, bất khuất, trung hậu, đảm đang 🌟", "B. Chăm chỉ ngủ nướng", "C. Thích ăn vặt cả ngày"], correctAnswer: 0 },
+            { q: "5. Bạn đã sẵn sàng nhận món quà bí mật ngày 20/10 chưa?", options: ["A. Sẵn sàng lắm rồi, mở quà thôi! 🎁", "B. Chưa muốn nhận lắm", "C. Thôi ngại lắm"], correctAnswer: 0 }
         ];
 
         let selectedNumber = null;
         let currentQuestionIndex = 0;
 
-        // Xử lý Bước 1
         function goToStep2() {
             const num = document.getElementById('numInput').value;
             if (!num || num < 1 || num > 41) {
@@ -370,7 +344,6 @@
             showStep('step2');
         }
 
-        // Xử lý Bước 2
         function answerDay(choice) {
             const commentElement = document.getElementById('commentDay');
             if (choice === '20-10') {
@@ -381,11 +354,9 @@
 
             const person = data[selectedNumber];
             document.getElementById('personName').innerText = person ? person.name : "Bạn mang số " + selectedNumber;
-            
             showStep('step3');
         }
 
-        // Bắt đầu phần trả lời 5 câu hỏi
         function startQuiz() {
             currentQuestionIndex = 0;
             document.getElementById('quizFeedback').innerText = "";
@@ -393,7 +364,6 @@
             showStep('stepQuiz');
         }
 
-        // Hiển thị nội dung từng câu hỏi
         function showQuestion() {
             const qData = questions[currentQuestionIndex];
             document.getElementById('quizProgress').innerText = `Câu hỏi ${currentQuestionIndex + 1} / ${questions.length}`;
@@ -412,7 +382,6 @@
             });
         }
 
-        // Kiểm tra đúng / sai
         function checkAnswer(selectedIndex) {
             const qData = questions[currentQuestionIndex];
             const feedbackElement = document.getElementById('quizFeedback');
@@ -420,7 +389,6 @@
             if (selectedIndex === qData.correctAnswer) {
                 feedbackElement.style.color = "#2e7d32";
                 feedbackElement.innerText = "Chính xác! 🎉 Đang chuyển câu tiếp theo...";
-                
                 setTimeout(() => {
                     currentQuestionIndex++;
                     if (currentQuestionIndex < questions.length) {
@@ -435,32 +403,22 @@
             }
         }
 
-        // Xử lý Hiện Quà Cuối Cùng
         function goToFinalStep() {
             const person = data[selectedNumber];
             const wishElement = document.getElementById('finalWish');
-            const imgElement = document.getElementById('finalImg');
-
             if (person) {
                 wishElement.innerText = person.wish;
-                imgElement.src = person.img;
             } else {
                 wishElement.innerText = "Chúc bạn có một ngày 20/10 vô cùng ấm áp, vui vẻ và luôn tươi tắn!";
-                imgElement.src = "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400";
             }
-
             showStep('stepFinal');
         }
 
-        // Hàm chuyển đổi các bước
         function showStep(stepId) {
             document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
             document.getElementById(stepId).classList.add('active');
         }
 
-        // =========================================================
-        // BỘ ĐIỀU KHIỂN NHẠC
-        // =========================================================
         function playMusic() {
             const music = document.getElementById('bgMusic');
             music.play().catch(error => {
@@ -480,9 +438,6 @@
             }
         }
 
-        // =========================================================
-        // HIỆU ỨNG HOA RƠI TỰ ĐỘNG
-        // =========================================================
         function createFlower() {
             const flower = document.createElement('div');
             flower.classList.add('snowflake');
