@@ -29,7 +29,7 @@
             transition: background 1s ease-in-out;
         }
 
-        /* 3D Galaxy Container (Ẩn lúc đầu, hiện ở bước cuối) */
+        /* 3D Galaxy Container */
         #container {
             position: fixed;
             inset: 0;
@@ -44,7 +44,7 @@
             touch-action: none;
         }
 
-        /* Khung thẻ kính mờ (Glassmorphism) các bước đầu */
+        /* Khung thẻ kính mờ (Glassmorphism) */
         .card {
             background: rgba(35, 12, 28, 0.85);
             backdrop-filter: blur(16px);
@@ -375,19 +375,23 @@
         }
         #letter-done.in { opacity: 1; pointer-events: auto; }
 
+        /* ===== Khung chứa Hiệu ứng Mưa Ảnh rơi từ trên xuống ===== */
         #photo-rise { position: fixed; inset: 0; z-index: 8; pointer-events: none; overflow: hidden; }
         .pr-card {
-            position: absolute; top: 100%; box-sizing: border-box; padding: 0; border-radius: 18px;
-            opacity: 0; will-change: transform, opacity; animation: prRise var(--dur) linear forwards;
+            position: absolute; top: -25vh; box-sizing: border-box; padding: 0; border-radius: 18px;
+            opacity: 0; will-change: transform, opacity; animation: prFall var(--dur) linear forwards;
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.4);
         }
         .pr-card img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 18px; }
         .pr-fallback { width: 100%; height: 100%; border-radius: 12px; display: grid; place-items: center; font-size: 34px; color: #ffd6ec; background: radial-gradient(circle at 30% 25%, #ff9ccd, #b02a72 75%); }
-        @keyframes prRise {
+        
+        /* Animation Rơi từ trên xuống dưới mượt mà */
+        @keyframes prFall {
             0%   { transform: translate3d(0, 0, 0) rotate(var(--r0)) scale(var(--sc)); opacity: 0; }
-            10%  { opacity: var(--op); }
-            50%  { transform: translate3d(var(--sw), -62vh, 0) rotate(var(--r1)) scale(var(--sc)); }
-            90%  { opacity: var(--op); }
-            100% { transform: translate3d(calc(var(--sw) * -0.6), -130vh, 0) rotate(var(--r0)) scale(var(--sc)); opacity: 0; }
+            15%  { opacity: var(--op); }
+            50%  { transform: translate3d(var(--sw), 65vh, 0) rotate(var(--r1)) scale(var(--sc)); }
+            85%  { opacity: var(--op); }
+            100% { transform: translate3d(calc(var(--sw) * -0.5), 130vh, 0) rotate(var(--r0)) scale(var(--sc)); opacity: 0; }
         }
         @keyframes tapPulse {
             0%, 100% { transform: translateX(-50%) translateY(0) scale(1); }
@@ -709,13 +713,13 @@
         }
     </script>
 
-    <!-- Script 3D Thiên Hà tích hợp 100 ảnh từ GitHub -->
+    <!-- Script 3D Thiên Hà nạp 100 ảnh tự động -->
     <script type="module">
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
         window.initGalaxySpace = function() {
-            // Tự động lấy 100 ảnh từ anh1.jpg đến anh100.jpg
+            // GIỮ NGUYÊN ĐOẠN NẠP 100 ẢNH TỰ ĐỘNG
             const dynamicImages = [];
             for (let i = 1; i <= 100; i++) {
                 dynamicImages.push(`anh${i}.jpg`);
@@ -804,9 +808,8 @@
             const galaxyParameters = { count: 100000, arms: 6, radius: 100, spin: 0.5, randomness: 0.2, randomnessPower: 20, insideColor: new THREE.Color(0xd63ed6), outsideColor: new THREE.Color(0x48b8b8) };
             const heartImages = CONFIG.images;
             const numGroups = heartImages.length;
-            const photoMode = heartImages.some(Boolean);
             const photoGroups = [];
-            let photoReveal = 0, photoRevealTarget = 0, photosRevealed = false;
+            let photoReveal = 0, photoRevealTarget = 0;
             const photoSmall = Math.min(window.innerWidth, window.innerHeight) < 700;
             const photoPerGroup = photoSmall ? 15 : 25;
             const photoSize = photoSmall ? 10 : 11;
@@ -1011,7 +1014,7 @@
 
             const pMat = new THREE.ShaderMaterial({
                 uniforms: { uMix: { value: 1 }, uTime: { value: 0 }, uScale: { value: 600 }, uAlpha: { value: 0 } },
-                vertexShader: `attribute vec3 aTo; attribute vec3 aColFrom; attribute vec3 aColTo; uniform float uMix; varying vec3 vColor; void main() { vec3 p = mix(position, aTo, clamp(uMix, 0.0, 1.0)); vec4 mv = modelViewMatrix * vec4(p, 1.0); gl_Position = projectionMatrix * mv; gl_PointSize = 4.0 / -mv.z; vColor = mix(aColFrom, aColTo, clamp(uMix, 0.0, 1.0)); }`,
+                vertexShader: `attribute vec3 aTo; attribute vec3 aColFrom; attribute vec3 aColTo; uniform float uMix; varying vec3 vColor; void main() { vec3 p = mix(position, aTo, clamp(uMix, 0.0, 1.0)); vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_Position = projectionMatrix * mv; gl_PointSize = 4.0 / -mv.z; vColor = mix(aColFrom, aColTo, clamp(uMix, 0.0, 1.0)); }`,
                 fragmentShader: `uniform float uAlpha; varying vec3 vColor; void main() { if (length(gl_PointCoord - vec2(0.5)) > 0.5) discard; gl_FragColor = vec4(vColor, uAlpha); }`,
                 transparent: true, depthTest: false, depthWrite: false, blending: THREE.AdditiveBlending
             });
@@ -1103,15 +1106,15 @@
                 }
             });
 
-            // Ảnh bay lên vòng lặp (100 ảnh từ GitHub)
+            // HIỆU ỨNG MƯA ẢNH RƠI TỪ TRÊN XUỐNG
             const riseBox = document.getElementById('photo-rise');
             function startPhotoRise() {
                 setInterval(() => {
                     if (riseBox.childElementCount < 10) {
                         const card = document.createElement('div');
                         card.className = 'pr-card';
-                        const wv = 15, hv = 18, x = Math.random() * 70, dur = 15;
-                        card.style.cssText = `left:${x}vw;width:${wv}vw;height:${hv}vw;--dur:${dur}s;--sc:1;--op:0.9;--sw:2vw;--r0:0deg;--r1:0deg;--sd:0s;`;
+                        const wv = 15, hv = 18, x = Math.random() * 75, dur = 14 + Math.random() * 6; // Rơi chậm nhẹ nhàng 14-20s
+                        card.style.cssText = `left:${x}vw;width:${wv}vw;height:${hv}vw;--dur:${dur}s;--sc:1;--op:0.9;--sw:3vw;--r0:${(Math.random()-0.5)*15}deg;--r1:${(Math.random()-0.5)*15}deg;`;
                         const img = new Image();
                         img.src = heartImages[Math.floor(Math.random() * heartImages.length)];
                         img.onerror = () => { const fb = document.createElement('div'); fb.className = 'pr-fallback'; fb.textContent = '♥'; img.replaceWith(fb); };
@@ -1119,7 +1122,7 @@
                         card.addEventListener('animationend', () => card.remove());
                         riseBox.appendChild(card);
                     }
-                }, 1200);
+                }, 1100);
             }
 
             // Thư điện ảnh
@@ -1178,7 +1181,7 @@
                     rg.rotation.y = rg.userData.angleOffset;
                 });
 
-                // Hiệu ứng hiện ảnh thiên hà 3D mượt mà
+                // Hiệu ứng hiện ảnh thiên hà 3D
                 if (photoRevealTarget > 0) {
                     photoReveal += (photoRevealTarget - photoReveal) * 0.022;
                     photoGroups.forEach(g => {
