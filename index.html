@@ -121,8 +121,6 @@
             border-radius: 15px;
             border: 2px dashed #ff4081;
             margin-top: 10px;
-            position: relative;
-            overflow: hidden;
         }
 
         .running-text-container {
@@ -152,8 +150,6 @@
             height: auto;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 2;
         }
 
         .comment-text {
@@ -189,7 +185,7 @@
             align-items: center;
         }
 
-        /* 1. Hiệu ứng hoa rơi (chạy từ đầu đến hết Bước 4) */
+        /* 1. Hiệu ứng hoa rơi (từ đầu đến hết Bước 4) */
         .snowflake {
             position: fixed;
             top: -10px;
@@ -213,31 +209,31 @@
             100% { transform: translateX(0px); }
         }
 
-        /* 2. Hiệu ứng ảnh kỷ niệm rơi chậm tại Bước 5 */
-        .falling-mini-photo {
-            position: absolute;
-            top: -60px;
-            width: 50px;
-            height: 50px;
+        /* 2. Hiệu ứng ảnh kỷ niệm rơi toàn màn hình từ đỉnh xuống (ở Bước 5) */
+        .falling-photo-fullscreen {
+            position: fixed;
+            top: -100px;
+            z-index: 998;
+            width: 65px;
+            height: 65px;
             object-fit: cover;
             border-radius: 50%;
             border: 2px solid #ff4081;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-            z-index: 3;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
             pointer-events: none;
-            animation: fallMiniPhoto linear infinite;
+            animation: fallPhotoFull linear infinite;
         }
 
-        @keyframes fallMiniPhoto {
+        @keyframes fallPhotoFull {
             0% {
-                top: -60px;
+                top: -100px;
                 transform: rotate(0deg);
-                opacity: 1;
+                opacity: 0.95;
             }
             100% {
-                top: 100%;
+                top: 105vh;
                 transform: rotate(360deg);
-                opacity: 0.2;
+                opacity: 0.3;
             }
         }
 
@@ -294,10 +290,10 @@
             <div id="quizOptions" class="btn-group"></div>
         </div>
 
-        <!-- BƯỚC 5: HIỂN THỊ KẾT QUẢ & ẢNH LỚP KÈM ẢNH RƠI -->
+        <!-- BƯỚC 5: HIỂN THỊ KẾT QUẢ & ẢNH LỚP KÈM ẢNH RƠI TOÀN MÀN HÌNH -->
         <div id="stepFinal" class="step">
             <h2>🎁 Quà 20/10 Dành Cho Bạn 🎁</h2>
-            <div class="gift-box" id="giftBoxContainer">
+            <div class="gift-box">
                 <!-- PHẦN CHỮ CHẠY TRÊN ẢNH LỚP -->
                 <div class="running-text-container">
                     <div class="running-text">🌟 Chúc mừng 20/10 tập thể lớp tuyệt vời nhất! Luôn đoàn kết, vui vẻ và rạng rỡ bên nhau nhé! 💖</div>
@@ -435,11 +431,11 @@
             }
         }
 
-        let fallingPhotoInterval = null;
+        let photoRainInterval = null;
         let flowerInterval = null;
 
         function goToFinalStep() {
-            // 1. Lập tức dừng và xóa toàn bộ hiệu ứng hoa rơi ở màn hình chính
+            // 1. Dừng và xóa hoàn toàn hoa rơi
             if (flowerInterval) {
                 clearInterval(flowerInterval);
                 flowerInterval = null;
@@ -455,9 +451,9 @@
             }
             showStep('stepFinal');
 
-            // 2. Bắt đầu hiệu ứng ảnh lớp rơi chậm quanh khung quà cuối
-            if (!fallingPhotoInterval) {
-                fallingPhotoInterval = setInterval(createFallingMiniPhoto, 1500);
+            // 2. Bắt đầu hiệu ứng ảnh kỷ niệm rơi toàn màn hình từ đỉnh xuống
+            if (!photoRainInterval) {
+                photoRainInterval = setInterval(createFullscreenFallingPhoto, 1200);
             }
         }
 
@@ -485,7 +481,7 @@
             }
         }
 
-        // Khởi động hiệu ứng hoa rơi từ đầu
+        // Khởi động hoa rơi từ đầu
         flowerInterval = setInterval(() => {
             const flower = document.createElement('div');
             flower.classList.add('snowflake');
@@ -503,25 +499,23 @@
             }, duration * 1000);
         }, 300);
 
-        // Hiệu ứng ảnh kỷ niệm rơi quanh khung quà cuối
+        // Danh sách các ảnh kỷ niệm rơi toàn màn hình
         const photoList = ['anh1.jpg', 'anh2.jpg', 'anh3.jpg', 'anh4.jpg', 'anh5.jpg', 'anh6.jpg', 'anh7.jpg', 'anh8.jpg', 'anh9.jpg'];
 
-        function createFallingMiniPhoto() {
-            const container = document.getElementById('giftBoxContainer');
-            if (!container) return;
-
+        function createFullscreenFallingPhoto() {
             const img = document.createElement('img');
-            img.classList.add('falling-mini-photo');
+            img.classList.add('falling-photo-fullscreen');
             
             const randomPhoto = photoList[Math.floor(Math.random() * photoList.length)];
             img.src = randomPhoto;
 
-            img.style.left = Math.random() * (container.offsetWidth - 50) + 'px';
+            // Vị trí ngang ngẫu nhiên trên toàn màn hình
+            img.style.left = Math.random() * window.innerWidth + 'px';
 
-            const duration = Math.random() * 4 + 5;
+            const duration = Math.random() * 4 + 7; // Rơi từ 7 đến 11 giây
             img.style.animationDuration = duration + 's';
 
-            container.appendChild(img);
+            document.body.appendChild(img);
 
             setTimeout(() => {
                 img.remove();
