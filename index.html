@@ -13,7 +13,8 @@
         }
 
         body {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            /* Nền không gian huyền bí, tối cao và sang trọng ngay từ đầu */
+            background: radial-gradient(circle at center, #1b0c30 0%, #05020a 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -27,11 +28,15 @@
             background: radial-gradient(circle at center, #2b1055 0%, #000000 100%);
         }
 
+        /* Khung thẻ kính mờ (Glassmorphism) đẳng cấp */
         .card {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            background: rgba(20, 15, 35, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 30px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 105, 180, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 105, 180, 0.2);
             max-width: 500px;
             width: 100%;
             text-align: center;
@@ -50,15 +55,16 @@
         }
 
         h2 {
-            color: #d81b60;
+            color: #ff66b2;
             margin-bottom: 15px;
-            font-size: 22px;
+            font-size: 24px;
+            text-shadow: 0 0 10px rgba(255, 102, 178, 0.5);
         }
 
         p {
-            color: #444;
+            color: #e0d0e5;
             font-size: 16px;
-            line-height: 1.5;
+            line-height: 1.6;
             margin-bottom: 20px;
         }
 
@@ -67,53 +73,58 @@
         }
 
         input[type="number"] {
-            padding: 12px;
-            font-size: 16px;
+            padding: 14px;
+            font-size: 18px;
             width: 80%;
             text-align: center;
+            background: rgba(10, 5, 20, 0.8);
             border: 2px solid #ff4081;
-            border-radius: 10px;
+            color: #fff;
+            border-radius: 12px;
             outline: none;
             transition: 0.3s;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
         }
 
         input:focus {
-            border-color: #d81b60;
-            box-shadow: 0 0 8px rgba(255, 64, 129, 0.4);
+            border-color: #ff80bf;
+            box-shadow: 0 0 15px rgba(255, 64, 129, 0.6), inset 0 2px 5px rgba(0,0,0,0.5);
         }
 
         .btn-group {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
             justify-content: center;
             margin-top: 15px;
         }
 
         button {
-            background: #ff4081;
+            background: linear-gradient(135deg, #ff4081 0%, #d81b60 100%);
             color: white;
             border: none;
-            padding: 12px 20px;
-            font-size: 15px;
+            padding: 14px 20px;
+            font-size: 16px;
             font-weight: bold;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
             transition: 0.3s;
             width: 100%;
+            box-shadow: 0 4px 15px rgba(216, 27, 96, 0.4);
         }
 
         button:hover {
-            background: #d81b60;
+            background: linear-gradient(135deg, #ff6699 0%, #ff1a75 100%);
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 64, 129, 0.6);
         }
 
         .quiz-option-btn {
-            background: #fff0f5;
-            color: #d81b60;
+            background: rgba(40, 20, 50, 0.8);
+            color: #ff99cc;
             border: 2px solid #ff4081;
             text-align: left;
-            padding: 12px 15px;
+            padding: 14px 18px;
         }
 
         .quiz-option-btn:hover {
@@ -136,11 +147,12 @@
         }
 
         .gift-box {
-            background: rgba(30, 30, 40, 0.9);
+            background: rgba(30, 20, 45, 0.85);
+            backdrop-filter: blur(15px);
             padding: 20px;
             border-radius: 20px;
             border: 2px solid #ff4081;
-            box-shadow: 0 0 25px rgba(255, 64, 129, 0.4);
+            box-shadow: 0 0 30px rgba(255, 64, 129, 0.5);
             max-width: 480px;
             width: 100%;
             text-align: center;
@@ -161,7 +173,7 @@
         .running-text-container {
             overflow: hidden;
             white-space: nowrap;
-            background: rgba(255, 192, 203, 0.2);
+            background: rgba(255, 105, 180, 0.15);
             border-radius: 8px;
             padding: 8px 0;
             margin-bottom: 12px;
@@ -170,7 +182,7 @@
         .running-text {
             display: inline-block;
             animation: marquee 12s linear infinite;
-            color: #ff80bf;
+            color: #ff99cc;
             font-weight: bold;
             font-size: 15px;
         }
@@ -184,21 +196,22 @@
             max-width: 100%;
             height: auto;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
             display: block;
             margin: 0 auto;
         }
 
         .comment-text {
-            color: #ff1744;
+            color: #ff6699;
             font-weight: bold;
             margin-bottom: 15px;
-            font-size: 17px;
+            font-size: 18px;
+            text-shadow: 0 0 8px rgba(255, 102, 153, 0.4);
         }
 
         .progress-text {
             font-size: 14px;
-            color: #888;
+            color: #bbb;
             margin-bottom: 10px;
             font-weight: bold;
         }
@@ -208,21 +221,27 @@
             top: 20px;
             right: 20px;
             z-index: 1005;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(30, 20, 45, 0.8);
             border: 2px solid #ff4081;
-            color: #d81b60;
+            color: #ff80bf;
             border-radius: 50%;
             width: 45px;
             height: 45px;
             font-size: 20px;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: 0.3s;
         }
 
-        /* 1. Hiệu ứng hoa rơi ở các bước đầu */
+        #musicBtn:hover {
+            transform: scale(1.1);
+            background: rgba(50, 30, 70, 0.9);
+        }
+
+        /* Hiệu ứng ánh sáng sao/hoa lấp lánh ban đầu */
         .snowflake {
             position: fixed;
             top: -10px;
@@ -246,7 +265,7 @@
             100% { transform: translateX(0px); }
         }
 
-        /* 2. HIỆU ỨNG ẢNH RƠI THẲNG TỪ TRÊN XUỐNG DƯỚI Ở BƯỚC CUỐI */
+        /* Hiệu ứng 100 ảnh rơi ở bước cuối */
         .falling-photo-fullscreen {
             position: fixed;
             top: -100px;
@@ -256,7 +275,7 @@
             object-fit: cover;
             border-radius: 50%;
             border: 2px solid #ff4081;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 0 15px rgba(255, 64, 129, 0.6);
             pointer-events: none;
             animation: fallPhotoFull linear infinite;
         }
@@ -286,7 +305,7 @@
     <div class="card active" id="mainCard">
         <!-- BƯỚC 1 -->
         <div id="step1" class="step active">
-            <h2>🌸 Chào Bạn! 🌸</h2>
+            <h2>✨ Cổng Không Gian Bí Mật ✨</h2>
             <p>Cho mình hỏi bạn mang số bao nhiêu thế? (Nhập từ 1 đến 41):</p>
             <div class="input-group">
                 <input type="number" id="numInput" min="1" max="41" placeholder="Nhập số của bạn...">
@@ -296,7 +315,7 @@
 
         <!-- BƯỚC 2 -->
         <div id="step2" class="step">
-            <h2>❓ Đố Bạn Biết</h2>
+            <h2>🌌 Thử Thách Nhỏ</h2>
             <p>Bạn có biết hôm nay là ngày gì không ta?</p>
             <div class="btn-group">
                 <button onclick="answerDay('20-10')">Ngày Phụ nữ Việt Nam 20/10 🌹</button>
@@ -306,11 +325,11 @@
 
         <!-- BƯỚC 3 -->
         <div id="step3" class="step">
-            <h2>✨ Xác Nhận Tên ✨</h2>
+            <h2>✨ Xác Nhận Danh Tính ✨</h2>
             <p id="commentDay" class="comment-text"></p>
-            <p>Có phải bạn tên là: <br><strong id="personName" style="font-size: 20px; color: #d81b60;">...</strong> không?</p>
+            <p>Có phải bạn tên là: <br><strong id="personName" style="font-size: 22px; color: #ff80bf; text-shadow: 0 0 10px rgba(255,128,191,0.5);">...</strong> không?</p>
             <div class="btn-group">
-                <button onclick="startQuiz()">Đúng rồi, trả lời thử thách nhận quà 20/10 nào! 🚀</button>
+                <button onclick="startQuiz()">Đúng rồi, bước vào thử thách nhận quà nào! 🚀</button>
             </div>
         </div>
 
@@ -318,7 +337,7 @@
         <div id="stepQuiz" class="step">
             <div id="quizProgress" class="progress-text">Câu hỏi 1 / 5</div>
             <h2 id="quizQuestion">Nội dung câu hỏi...</h2>
-            <p id="quizFeedback" style="color: #ff1744; font-weight: bold; min-height: 24px; margin-bottom: 10px;"></p>
+            <p id="quizFeedback" style="color: #ff6699; font-weight: bold; min-height: 24px; margin-bottom: 10px;"></p>
             <div id="quizOptions" class="btn-group"></div>
         </div>
     </div>
@@ -402,7 +421,7 @@
         function answerDay(choice) {
             const commentElement = document.getElementById('commentDay');
             if (choice === '20-10') {
-                commentElement.innerText = "Wao giỏi dữ! 👏";
+                commentElement.innerText = "Wao xuất sắc! 👏";
             } else {
                 commentElement.innerText = "Hôm nay là ngày 20-10 đấy nha! 😜";
             }
@@ -442,8 +461,8 @@
             const feedbackElement = document.getElementById('quizFeedback');
 
             if (selectedIndex === qData.correctAnswer) {
-                feedbackElement.style.color = "#2e7d32";
-                feedbackElement.innerText = "Chính xác! 🎉 Đang chuyển câu tiếp theo...";
+                feedbackElement.style.color = "#00e676";
+                feedbackElement.innerText = "Chính xác! 🎉 Đang mở khóa cửa tiếp theo...";
                 setTimeout(() => {
                     currentQuestionIndex++;
                     if (currentQuestionIndex < questions.length) {
@@ -453,7 +472,7 @@
                     }
                 }, 800);
             } else {
-                feedbackElement.style.color = "#d32f2f";
+                feedbackElement.style.color = "#ff5252";
                 feedbackElement.innerText = "Chưa chính xác rồi, thử chọn đáp án khác xem nào! ❌";
             }
         }
@@ -488,7 +507,6 @@
                 finalStep.style.display = 'block';
                 setTimeout(() => finalStep.classList.add('active'), 50);
 
-                // Tạo mưa 100 ảnh rơi trực tiếp từ trên đỉnh màn hình xuống
                 if (!photoRainInterval) {
                     photoRainInterval = setInterval(createFullscreenFallingPhoto, 800);
                 }
@@ -519,13 +537,13 @@
             }
         }
 
-        // Khởi động hoa rơi ở các bước ban đầu
+        // Hiệu ứng ánh sáng sao/hoa lấp lánh ở các bước đầu
         flowerInterval = setInterval(() => {
             const flower = document.createElement('div');
             flower.classList.add('snowflake');
-            flower.innerHTML = ['🌸', '🌹', '🌷', '✨', '💖'][Math.floor(Math.random() * 5)];
+            flower.innerHTML = ['✨', '💫', '⭐', '💖'][Math.floor(Math.random() * 4)];
             flower.style.left = Math.random() * window.innerWidth + 'px';
-            flower.style.fontSize = (Math.random() * 15 + 15) + 'px';
+            flower.style.fontSize = (Math.random() * 12 + 12) + 'px';
             
             const duration = Math.random() * 5 + 5;
             flower.style.animationDuration = `${duration}s, 3s`;
@@ -537,13 +555,12 @@
             }, duration * 1000);
         }, 300);
 
-        // Tạo mảng tự động 100 ảnh từ anh1.jpg đến anh100.jpg
+        // Mảng 100 ảnh từ anh1.jpg đến anh100.jpg
         const photoList = [];
         for (let i = 1; i <= 100; i++) {
             photoList.push(`anh${i}.jpg`);
         }
 
-        // Hàm rơi ảnh thẳng từ trên đỉnh xuống dưới
         function createFullscreenFallingPhoto() {
             const img = document.createElement('img');
             img.classList.add('falling-photo-fullscreen');
@@ -553,7 +570,7 @@
 
             img.style.left = Math.random() * (window.innerWidth - 70) + 'px';
 
-            const duration = Math.random() * 4 + 7; // Tốc độ rơi lả tả từ 7s đến 11s
+            const duration = Math.random() * 4 + 7;
             img.style.animationDuration = duration + 's';
 
             document.body.appendChild(img);
