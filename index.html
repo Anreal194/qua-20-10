@@ -451,9 +451,9 @@
             }
             showStep('stepFinal');
 
-            // 2. Bắt đầu hiệu ứng ảnh kỷ niệm rơi toàn màn hình từ đỉnh xuống
+            // 2. Bắt đầu hiệu ứng 100 ảnh kỷ niệm rơi toàn màn hình từ đỉnh xuống
             if (!photoRainInterval) {
-                photoRainInterval = setInterval(createFullscreenFallingPhoto, 1200);
+                photoRainInterval = setInterval(createFullscreenFallingPhoto, 800);
             }
         }
 
@@ -499,8 +499,11 @@
             }, duration * 1000);
         }, 300);
 
-        // Danh sách các ảnh kỷ niệm rơi toàn màn hình
-        const photoList = ['anh1.jpg', 'anh2.jpg', 'anh3.jpg', 'anh4.jpg', 'anh5.jpg', 'anh6.jpg', 'anh7.jpg', 'anh8.jpg', 'anh9.jpg'];
+        // Tạo tự động mảng 100 tấm ảnh từ anh1.jpg đến anh100.jpg
+        const photoList = [];
+        for (let i = 1; i <= 100; i++) {
+            photoList.push(`anh${i}.jpg`);
+        }
 
         function createFullscreenFallingPhoto() {
             const img = document.createElement('img');
