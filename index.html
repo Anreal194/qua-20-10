@@ -19,6 +19,7 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            overflow: hidden; /* Tránh thanh cuộn ngang do hoa rơi */
         }
 
         .card {
@@ -30,6 +31,8 @@
             width: 100%;
             text-align: center;
             animation: fadeIn 0.5s ease-in-out;
+            position: relative;
+            z-index: 999; /* Đảm bảo khung quà nằm trên hiệu ứng hoa */
         }
 
         h2 {
@@ -125,7 +128,7 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            z-index: 999;
+            z-index: 1000;
             background: rgba(255, 255, 255, 0.9);
             border: 2px solid #ff4081;
             color: #d81b60;
@@ -138,6 +141,30 @@
             display: flex;
             justify-content: center;
             align-items: center;
+        }
+
+        /* Hiệu ứng hoa rơi */
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            z-index: 998;
+            user-select: none;
+            cursor: default;
+            animation-name: fall, shake;
+            animation-duration: 10s, 3s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+        }
+
+        @keyframes fall {
+            0% { top: -10px; }
+            100% { top: 105vh; }
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0px); }
+            50% { transform: translateX(80px); }
+            100% { transform: translateX(0px); }
         }
 
         @keyframes fadeIn {
@@ -296,6 +323,28 @@
                 btn.innerText = "🔇";
             }
         }
+
+        // =========================================================
+        // HIỆU ỨNG HOA RƠI TỰ ĐỘNG
+        // =========================================================
+        function createFlower() {
+            const flower = document.createElement('div');
+            flower.classList.add('snowflake');
+            flower.innerHTML = ['🌸', '🌹', '🌷', '✨', '💖'][Math.floor(Math.random() * 5)];
+            flower.style.left = Math.random() * window.innerWidth + 'px';
+            flower.style.fontSize = (Math.random() * 15 + 15) + 'px';
+            
+            const duration = Math.random() * 5 + 5;
+            flower.style.animationDuration = `${duration}s, 3s`;
+            
+            document.body.appendChild(flower);
+
+            setTimeout(() => {
+                flower.remove();
+            }, duration * 1000);
+        }
+
+        setInterval(createFlower, 300);
     </script>
 
 </body>
