@@ -3,168 +3,297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hộp Quà Bí Mật 20/10 🎁</title>
+    <title>Món Quà 20/10 Bí Mật 🎁</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            padding: 20px;
         }
-        .container {
-            background: white;
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
             padding: 30px;
             border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             max-width: 450px;
             width: 100%;
             text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
         }
+
         h2 {
             color: #d81b60;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 22px;
         }
+
         p {
-            color: #555;
-            font-size: 15px;
+            color: #444;
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 20px;
         }
+
         .input-group {
             margin: 20px 0;
         }
-        input[type="number"] {
+
+        input[type="number"], input[type="text"] {
             padding: 12px;
-            font-size: 18px;
-            width: 100px;
+            font-size: 16px;
+            width: 80%;
             text-align: center;
             border: 2px solid #ff4081;
             border-radius: 10px;
             outline: none;
             transition: 0.3s;
         }
-        input[type="number"]:focus {
+
+        input:focus {
             border-color: #d81b60;
             box-shadow: 0 0 8px rgba(255, 64, 129, 0.4);
         }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
         button {
             background: #ff4081;
             color: white;
             border: none;
-            padding: 12px 25px;
+            padding: 12px 24px;
             font-size: 16px;
             font-weight: bold;
             border-radius: 10px;
             cursor: pointer;
             transition: 0.3s;
-            margin-left: 10px;
         }
+
         button:hover {
             background: #d81b60;
+            transform: translateY(-2px);
         }
-        #result {
-            margin-top: 25px;
-            animation: fadeIn 0.5s ease-in-out;
+
+        .step {
+            display: none;
         }
-        .gift-card {
+
+        .step.active {
+            display: block;
+        }
+
+        .gift-box {
             background: #fff0f5;
             padding: 20px;
             border-radius: 15px;
-            border: 1px dashed #ff4081;
+            border: 2px dashed #ff4081;
+            margin-top: 15px;
         }
-        .gift-card p {
-            font-size: 16px;
-            color: #333;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-        img {
+
+        .gift-box img {
             max-width: 100%;
             height: auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            margin-top: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
+
+        .comment-text {
+            color: #ff1744;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 17px;
+        }
+
+        /* Nút bật/tắt nhạc nổi ở góc màn hình */
+        #musicBtn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 999;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #ff4081;
+            color: #d81b60;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>🌸 Hộp Quà 20/10 Bí Mật 🌸</h2>
-        <p>Nhập con số may mắn của bạn (từ 1 đến 41) để mở quà nhé!</p>
-        
-        <div class="input-group">
-            <input type="number" id="numInput" min="1" max="41" placeholder="Số...">
-            <button onclick="showGift()">Mở Quà</button>
+    <!-- THẺ PHÁT NHẠC -->
+    <audio id="bgMusic" loop>
+        <source src="nhac.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- NÚT BẬT/TẮT NHẠC NỔI GÓC TRÊN -->
+    <button id="musicBtn" onclick="toggleMusic()">🎵</button>
+
+    <div class="card">
+        <!-- BƯỚC 1: Hỏi Số -->
+        <div id="step1" class="step active">
+            <h2>🌸 Chào Bạn! 🌸</h2>
+            <p>Cho mình hỏi bạn mang số bao nhiêu thế? (Nhập từ 1 đến 41):</p>
+            <div class="input-group">
+                <input type="number" id="numInput" min="1" max="41" placeholder="Nhập số của bạn...">
+            </div>
+            <button onclick="goToStep2()">Tiếp tục ➡️</button>
         </div>
-        
-        <div id="result"></div>
+
+        <!-- BƯỚC 2: Hỏi Hôm Nay Là Ngày Gì -->
+        <div id="step2" class="step">
+            <h2>❓ Đố Bạn Biết</h2>
+            <p>Bạn có biết hôm nay là ngày gì không ta?</p>
+            <div class="btn-group">
+                <button onclick="answerDay('20-10')">Ngày 20-10 🌹</button>
+                <button onclick="answerDay('khong')">Không biết 😅</button>
+            </div>
+        </div>
+
+        <!-- BƯỚC 3: Hỏi Xác Nhận Tên -->
+        <div id="step3" class="step">
+            <h2>✨ Xác Nhận Tên ✨</h2>
+            <p id="commentDay" class="comment-text"></p>
+            <p>Có phải bạn tên là: <br><strong id="personName" style="font-size: 20px; color: #d81b60;">...</strong> không?</p>
+            <div class="btn-group">
+                <button onclick="goToFinalStep()">Đúng rồi chính là mình! 🥰</button>
+            </div>
+        </div>
+
+        <!-- BƯỚC 4: Hiển Thị Lời Chúc & Hình Ảnh -->
+        <div id="step4" class="step">
+            <h2>🎁 Quà 20/10 Dành Cho Bạn 🎁</h2>
+            <div class="gift-box">
+                <p id="finalWish" style="font-size: 17px; color: #333; font-weight: bold;"></p>
+                <img id="finalImg" src="" alt="Hình ảnh lời chúc 20/10">
+            </div>
+        </div>
     </div>
 
     <script>
-        // Danh sách nội dung từ 1 đến 41 (Bạn thay đổi lời chúc và link hình ảnh ở đây)
-        const gifts = {
-            1: { text: "Chúc bạn số 1 luôn xinh đẹp, rạng rỡ và hạnh phúc bên gia đình!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
-            2: { text: "Chúc số 2 một ngày 20/10 ngập tràn hoa, quà và những nụ cười!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
-            3: { text: "Số 3: Chúc bạn luôn thành công trên con đường mình đã chọn!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
-            4: { text: "Số 4: Mong điều tuyệt vời nhất sẽ đến với bạn ngày hôm nay!", img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400" },
-            5: { text: "Số 5: Chúc bạn mãi trẻ trung, yêu đời và luôn tràn đầy năng lượng!", img: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400" },
-            6: { text: "Số 6: Chúc bạn có một ngày lễ 20/10 thật đáng nhớ và ý nghĩa!", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400" },
-            7: { text: "Số 7: Luôn mỉm cười và hạnh phúc nhé cô gái ơi!", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400" },
-            8: { text: "Số 8: Chúc bạn vạn sự như ý, luôn được yêu thương chiều chuộng.", img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400" },
-            9: { text: "Số 9: Một ngày 20/10 ngập tràn niềm vui và bất ngờ đang chờ bạn!", img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400" },
-            10: { text: "Số 10: Chúc bạn luôn tỏa sáng theo cách riêng của mình!", img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400" },
-            11: { text: "Số 11: Chúc bạn một đời bình an, hạnh phúc và tràn ngập tiếng cười.", img: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=400" },
-            12: { text: "Số 12: Mong mọi điều ước của bạn trong ngày hôm nay đều thành hiện thực.", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400" },
-            13: { text: "Số 13: Chúc bạn luôn giữ được sự tự tin và nguồn năng lượng tích cực.", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400" },
-            14: { text: "Số 14: Cảm ơn bạn vì đã luôn là một người tuyệt vời!", img: "https://images.unsplash.com/photo-1491349174776-aaaf8859c2b7?w=400" },
-            15: { text: "Số 15: Chúc bạn nhận được thật nhiều hoa và quà trong ngày 20/10.", img: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400" },
-            16: { text: "Số 16: Chúc bạn luôn may mắn và gặp nhiều điều tốt lành trong cuộc sống.", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400" },
-            17: { text: "Số 17: Chúc bạn có một ngày lễ trọn vẹn bên những người thân yêu.", img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400" },
-            18: { text: "Số 18: Chúc bạn luôn giữ mãi nụ cười trên môi, dù ở bất cứ hoàn cảnh nào.", img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400" },
-            19: { text: "Số 19: Chúc cô gái số 19 một đời an nhiên, hạnh phúc ngập tràn.", img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400" },
-            20: { text: "Số 20: Chúc bạn luôn xinh đẹp, trẻ trung và thành công rực rỡ!", img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400" },
-            21: { text: "Số 21: Chúc bạn một ngày 20/10 ngọt ngào và đáng nhớ nhất.", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
-            22: { text: "Số 22: Chúc bạn luôn là bông hoa đẹp nhất trong khu vườn cuộc sống.", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
-            23: { text: "Số 23: Chúc bạn luôn kiên định và đạt được mọi mục tiêu đặt ra.", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
-            24: { text: "Số 24: Chúc bạn tận hưởng một ngày lễ thật trọn vẹn và hạnh phúc.", img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400" },
-            25: { text: "Số 25: Chúc bạn luôn tràn đầy niềm cảm hứng và sự sáng tạo.", img: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400" },
-            26: { text: "Số 26: Chúc bạn luôn có những phút giây thư giãn và bình yên bên gia đình.", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400" },
-            27: { text: "Số 27: Chúc bạn một ngày mới tuyệt vời cùng ngập tràn yêu thương.", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400" },
-            28: { text: "Số 28: Chúc bạn luôn giữ vững tinh thần lạc quan và yêu đời.", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400" },
-            29: { text: "Số 29: Chúc bạn nhận được món quà bất ngờ nhất trong ngày hôm nay!", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400" },
-            30: { text: "Số 30: Chúc mốc số 30 của bạn luôn ngập tràn tiếng cười và niềm vui.", img: "https://images.unsplash.com/photo-1491349174776-aaaf8859c2b7?w=400" },
-            31: { text: "Số 31: Chúc bạn luôn gặp những điều may mắn và tốt lành nhất.", img: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400" },
-            32: { text: "Số 32: Chúc bạn một ngày 20/10 thật nhiều kỷ niệm đẹp.", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400" },
-            33: { text: "Số 33: Chúc bạn luôn tự tin bước đi trên con đường hạnh phúc của mình.", img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400" },
-            34: { text: "Số 34: Chúc bạn mãi giữ được nét hồn nhiên và tươi trẻ.", img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400" },
-            35: { text: "Số 35: Chúc bạn luôn được yêu thương vô điều kiện từ những người bên cạnh.", img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400" },
-            36: { text: "Số 36: Chúc bạn một ngày lễ tràn đầy năng lượng tích cực.", img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400" },
-            37: { text: "Số 37: Chúc bạn luôn cảm thấy ấm áp và hạnh phúc trong ngày hôm nay.", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
-            38: { text: "Số 38: Chúc bạn vạn sự hanh thông, công việc và tình cảm đều thuận lợi.", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
-            39: { text: "Số 39: Chúc bạn luôn là phiên bản hoàn hảo nhất của chính mình.", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
-            40: { text: "Số 40: Chúc bạn một ngày 20/10 ngập tràn hoa tươi và những lời chúc tốt đẹp.", img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400" },
-            41: { text: "Số 41: Chúc bạn số cuối trọn vẹn, luôn hạnh phúc và mỉm cười mỗi ngày!", img: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400" }
+        // =========================================================
+        // DANH SÁCH DỮ LIỆU DÀNH CHO 41 SỐ (CHỈNH SỬA TẠI ĐÂY)
+        // =========================================================
+        const data = {
+            1: {
+                name: "Nguyễn Văn A",
+                wish: "Chúc bạn số 1 luôn xinh đẹp, tự tin và ngập tràn hạnh phúc trong ngày 20/10 nhé!",
+                img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400"
+            },
+            2: {
+                name: "Trần Thị B",
+                wish: "Số 2 ơi, chúc bạn một ngày 20/10 thật nhiều hoa, quà và nụ cười rạng rỡ!",
+                img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400"
+            },
+            3: {
+                name: "Lê Thị C",
+                wish: "Chúc số 3 luôn tươi trẻ, tràn đầy năng lượng và đạt được mọi mục tiêu!",
+                img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400"
+            }
         };
 
-        function showGift() {
+        // Biến lưu trữ số người dùng đã chọn
+        let selectedNumber = null;
+
+        // Xử lý Bước 1
+        function goToStep2() {
             const num = document.getElementById('numInput').value;
-            const resultDiv = document.getElementById('result');
+            if (!num || num < 1 || num > 41) {
+                alert("Vui lòng nhập một số hợp lệ từ 1 đến 41 nhé!");
+                return;
+            }
+            selectedNumber = num;
             
-            if (gifts[num]) {
-                resultDiv.innerHTML = `
-                    <div class="gift-card">
-                        <p>${gifts[num].text}</p>
-                        <img src="${gifts[num].img}" alt="Hình ảnh quà tặng">
-                    </div>
-                `;
+            // PHÁT NHẠC KHI QUA BƯỚC 2
+            playMusic();
+            
+            showStep('step2');
+        }
+
+        // Xử lý Bước 2 (Câu hỏi ngày 20-10)
+        function answerDay(choice) {
+            const commentElement = document.getElementById('commentDay');
+            if (choice === '20-10') {
+                commentElement.innerText = "Wao giỏi dữ! 👏";
             } else {
-                resultDiv.innerHTML = `<p style="color: #d81b60; font-weight: bold;">⚠️ Vui lòng nhập một số hợp lệ từ 1 đến 41 bạn nhé!</p>`;
+                commentElement.innerText = "Hôm nay là ngày 20-10 đấy nha! 😜";
+            }
+
+            const person = data[selectedNumber];
+            document.getElementById('personName').innerText = person ? person.name : "Bạn mang số " + selectedNumber;
+            
+            showStep('step3');
+        }
+
+        // Xử lý Bước 4 (Hiện quà)
+        function goToFinalStep() {
+            const person = data[selectedNumber];
+            const wishElement = document.getElementById('finalWish');
+            const imgElement = document.getElementById('finalImg');
+
+            if (person) {
+                wishElement.innerText = person.wish;
+                imgElement.src = person.img;
+            } else {
+                wishElement.innerText = "Chúc bạn có một ngày 20/10 vô cùng ấm áp, vui vẻ và luôn tươi tắn!";
+                imgElement.src = "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400";
+            }
+
+            showStep('step4');
+        }
+
+        // Hàm chuyển đổi giữa các bước
+        function showStep(stepId) {
+            document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+            document.getElementById(stepId).classList.add('active');
+        }
+
+        // =========================================================
+        // BỘ ĐIỀU KHIỂN NHẠC
+        // =========================================================
+        function playMusic() {
+            const music = document.getElementById('bgMusic');
+            music.play().catch(error => {
+                console.log("Trình duyệt chặn nhạc tự động: ", error);
+            });
+        }
+
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const btn = document.getElementById('musicBtn');
+            if (music.paused) {
+                music.play();
+                btn.innerText = "🎵";
+            } else {
+                music.pause();
+                btn.innerText = "🔇";
             }
         }
     </script>
