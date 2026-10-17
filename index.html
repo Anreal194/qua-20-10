@@ -13,8 +13,8 @@
         }
 
         body {
-            /* Nền không gian tối cao, huyền ảo */
-            background: radial-gradient(circle at center, #1b0c30 0%, #05020a 100%);
+            /* Nền không gian màu hồng tối cao, huyền ảo và lãng mạn */
+            background: radial-gradient(circle at center, #2e0821 0%, #0d0107 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -25,18 +25,18 @@
         }
 
         body.space-background {
-            background: radial-gradient(circle at center, #2b1055 0%, #000000 100%);
+            background: radial-gradient(circle at center, #3b0b2e 0%, #0a0005 100%);
         }
 
-        /* Khung thẻ kính mờ (Glassmorphism) đẳng cấp */
+        /* Khung thẻ kính mờ (Glassmorphism) với tông hồng đẳng cấp */
         .card {
-            background: rgba(20, 15, 35, 0.75);
+            background: rgba(35, 12, 28, 0.75);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             padding: 30px;
             border-radius: 24px;
-            border: 1px solid rgba(255, 105, 180, 0.3);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 105, 180, 0.25);
+            border: 1px solid rgba(255, 105, 180, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 105, 180, 0.25);
             max-width: 500px;
             width: 100%;
             text-align: center;
@@ -54,14 +54,14 @@
             transform: scale(1) translateY(0);
         }
 
-        /* Hiệu ứng chớp sáng dịch chuyển cổng không gian */
+        /* Hiệu ứng chớp sáng dịch chuyển cổng không gian màu hồng */
         .warp-effect {
             animation: warpFlash 0.8s ease-in-out !important;
         }
 
         @keyframes warpFlash {
             0% { transform: scale(1); filter: brightness(1); }
-            50% { transform: scale(1.2); filter: brightness(3) blur(2px); opacity: 0.2; }
+            50% { transform: scale(1.15); filter: brightness(2.5) hue-rotate(20deg) blur(2px); opacity: 0.3; }
             100% { transform: scale(1); filter: brightness(1); opacity: 1; }
         }
 
@@ -73,7 +73,7 @@
         }
 
         p {
-            color: #e0d0e5;
+            color: #fce8f3;
             font-size: 16px;
             line-height: 1.6;
             margin-bottom: 20px;
@@ -88,7 +88,7 @@
             font-size: 18px;
             width: 80%;
             text-align: center;
-            background: rgba(10, 5, 20, 0.8);
+            background: rgba(20, 5, 15, 0.8);
             border: 2px solid #ff4081;
             color: #fff;
             border-radius: 12px;
@@ -111,7 +111,7 @@
         }
 
         button {
-            background: linear-gradient(135deg, #ff4081 0%, #d81b60 100%);
+            background: linear-gradient(135deg, #ff4081 0%, #c2185b 100%);
             color: white;
             border: none;
             padding: 14px 20px;
@@ -121,18 +121,18 @@
             cursor: pointer;
             transition: 0.3s;
             width: 100%;
-            box-shadow: 0 4px 15px rgba(216, 27, 96, 0.4);
+            box-shadow: 0 4px 15px rgba(194, 24, 91, 0.5);
         }
 
         button:hover {
-            background: linear-gradient(135deg, #ff6699 0%, #ff1a75 100%);
+            background: linear-gradient(135deg, #ff6699 0%, #d81b60 100%);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 64, 129, 0.6);
+            box-shadow: 0 6px 20px rgba(255, 64, 129, 0.7);
         }
 
         .quiz-option-btn {
-            background: rgba(40, 20, 50, 0.8);
-            color: #ff99cc;
+            background: rgba(50, 15, 35, 0.8);
+            color: #ffb3d1;
             border: 2px solid #ff4081;
             text-align: left;
             padding: 14px 18px;
@@ -158,12 +158,12 @@
         }
 
         .gift-box {
-            background: rgba(30, 20, 45, 0.85);
+            background: rgba(35, 12, 28, 0.85);
             backdrop-filter: blur(15px);
             padding: 20px;
             border-radius: 20px;
             border: 2px solid #ff4081;
-            box-shadow: 0 0 30px rgba(255, 64, 129, 0.5);
+            box-shadow: 0 0 35px rgba(255, 64, 129, 0.5);
             max-width: 480px;
             width: 100%;
             text-align: center;
@@ -184,7 +184,7 @@
         .running-text-container {
             overflow: hidden;
             white-space: nowrap;
-            background: rgba(255, 105, 180, 0.15);
+            background: rgba(255, 105, 180, 0.2);
             border-radius: 8px;
             padding: 8px 0;
             margin-bottom: 12px;
@@ -193,7 +193,7 @@
         .running-text {
             display: inline-block;
             animation: marquee 12s linear infinite;
-            color: #ff99cc;
+            color: #ffb3d1;
             font-weight: bold;
             font-size: 15px;
         }
@@ -222,7 +222,7 @@
 
         .progress-text {
             font-size: 14px;
-            color: #bbb;
+            color: #e0b0d0;
             margin-bottom: 10px;
             font-weight: bold;
         }
@@ -232,7 +232,7 @@
             top: 20px;
             right: 20px;
             z-index: 1005;
-            background: rgba(30, 20, 45, 0.8);
+            background: rgba(35, 12, 28, 0.8);
             border: 2px solid #ff4081;
             color: #ff80bf;
             border-radius: 50%;
@@ -240,7 +240,7 @@
             height: 45px;
             font-size: 20px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 15px rgba(255, 64, 129, 0.3);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -249,10 +249,10 @@
 
         #musicBtn:hover {
             transform: scale(1.1);
-            background: rgba(50, 30, 70, 0.9);
+            background: rgba(55, 20, 45, 0.9);
         }
 
-        /* Hiệu ứng ánh sáng sao/lấp lánh ban đầu */
+        /* Hiệu ứng hạt ánh sáng hồng lấp lánh */
         .snowflake {
             position: fixed;
             top: -10px;
@@ -276,7 +276,7 @@
             100% { transform: translateX(0px); }
         }
 
-        /* Hiệu ứng 100 ảnh rơi ở bước cuối */
+        /* Hiệu ứng 100 ảnh rơi chậm rãi từ trên xuống ở bước cuối */
         .falling-photo-fullscreen {
             position: fixed;
             top: -100px;
@@ -316,8 +316,8 @@
     <div class="card active" id="mainCard">
         <!-- BƯỚC 0: MÀN HÌNH CHÀO MỪNG & DỊCH CHUYỂN TỚI CÁNH CỔNG -->
         <div id="step0" class="step active">
-            <h2>🌌 Không Gian Kỷ Niệm 🌌</h2>
-            <p>Hệ thống quà tặng 20/10 bí mật đã được khởi tạo. Bạn đã sẵn sàng dịch chuyển xuyên không gian để khám phá chưa?</p>
+            <h2>🌸 Cổng Không Gian Hồng 🌸</h2>
+            <p>Hệ thống quà tặng 20/10 bí mật đã sẵn sàng. Hãy bấm nút bên dưới để dịch chuyển xuyên không gian vào trong nhé!</p>
             <div class="btn-group" style="margin-top: 25px;">
                 <button onclick="startWarpTransition()">Bắt đầu dịch chuyển 🚀</button>
             </div>
@@ -325,7 +325,7 @@
 
         <!-- BƯỚC 1 -->
         <div id="step1" class="step">
-            <h2>✨ Cổng Không Gian Bí Mật ✨</h2>
+            <h2>✨ Cổng Khóa Số ✨</h2>
             <p>Cho mình hỏi bạn mang số bao nhiêu thế? (Nhập từ 1 đến 41):</p>
             <div class="input-group">
                 <input type="number" id="numInput" min="1" max="41" placeholder="Nhập số của bạn...">
@@ -335,7 +335,7 @@
 
         <!-- BƯỚC 2 -->
         <div id="step2" class="step">
-            <h2>🌌 Thử Thách Nhỏ</h2>
+            <h2>💖 Thử Thách Nhỏ</h2>
             <p>Bạn có biết hôm nay là ngày gì không ta?</p>
             <div class="btn-group">
                 <button onclick="answerDay('20-10')">Ngày Phụ nữ Việt Nam 20/10 🌹</button>
@@ -430,7 +430,7 @@
         function startWarpTransition() {
             playMusic();
             const card = document.getElementById('mainCard');
-            card.classList.add('warp-effect'); // Kích hoạt hiệu ứng dịch chuyển chớp sáng
+            card.classList.add('warp-effect');
 
             setTimeout(() => {
                 card.classList.remove('warp-effect');
@@ -567,13 +567,13 @@
             }
         }
 
-        // Hiệu ứng ánh sáng sao/lấp lánh
+        // Hiệu ứng hạt ánh sáng hồng lấp lánh ban đầu
         flowerInterval = setInterval(() => {
             const flower = document.createElement('div');
             flower.classList.add('snowflake');
-            flower.innerHTML = ['✨', '💫', '⭐', '💖'][Math.floor(Math.random() * 4)];
+            flower.innerHTML = ['🌸', '💖', '✨', '🌷'][Math.floor(Math.random() * 4)];
             flower.style.left = Math.random() * window.innerWidth + 'px';
-            flower.style.fontSize = (Math.random() * 12 + 12) + 'px';
+            flower.style.fontSize = (Math.random() * 14 + 12) + 'px';
             
             const duration = Math.random() * 5 + 5;
             flower.style.animationDuration = `${duration}s, 3s`;
@@ -585,7 +585,7 @@
             }, duration * 1000);
         }, 300);
 
-        // Mảng 100 ảnh từ anh1.jpg đến anh100.jpg
+        // Tự động nạp mảng 100 ảnh từ anh1.jpg đến anh100.jpg
         const photoList = [];
         for (let i = 1; i <= 100; i++) {
             photoList.push(`anh${i}.jpg`);
