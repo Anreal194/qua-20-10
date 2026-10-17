@@ -121,9 +121,10 @@
             border-radius: 15px;
             border: 2px dashed #ff4081;
             margin-top: 10px;
+            position: relative;
+            overflow: hidden; /* Giới hạn hiệu ứng ảnh rơi bên trong hoặc xung quanh quà */
         }
 
-        /* HIỆU ỨNG CHẠY CHỮ TRÊN ẢNH */
         .running-text-container {
             overflow: hidden;
             white-space: nowrap;
@@ -151,6 +152,8 @@
             height: auto;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 2;
         }
 
         .comment-text {
@@ -186,31 +189,55 @@
             align-items: center;
         }
 
-        /* HIỆU ỨNG ẢNH RƠI CHẬM CHÃN */
-        .falling-photo {
+        /* 1. Hiệu ứng hoa/sao rơi toàn màn hình */
+        .snowflake {
             position: fixed;
-            top: -120px;
-            width: 70px;
-            height: 70px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 2px solid #fff;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            z-index: 1; /* Nằm phía sau hộp thoại chính */
-            pointer-events: none;
-            animation: fallPhoto linear infinite;
+            top: -10px;
+            z-index: 998;
+            user-select: none;
+            cursor: default;
+            animation-name: fall, shake;
+            animation-duration: 10s, 3s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
         }
 
-        @keyframes fallPhoto {
+        @keyframes fall {
+            0% { top: -10px; }
+            100% { top: 105vh; }
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0px); }
+            50% { transform: translateX(80px); }
+            100% { transform: translateX(0px); }
+        }
+
+        /* 2. Hiệu ứng ảnh kỷ niệm rơi riêng tại phần kết quả */
+        .falling-mini-photo {
+            position: absolute;
+            top: -60px;
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #ff4081;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            z-index: 3;
+            pointer-events: none;
+            animation: fallMiniPhoto linear infinite;
+        }
+
+        @keyframes fallMiniPhoto {
             0% {
-                top: -120px;
+                top: -60px;
                 transform: rotate(0deg);
-                opacity: 0.9;
+                opacity: 1;
             }
             100% {
-                top: 105vh;
+                top: 100%;
                 transform: rotate(360deg);
-                opacity: 0.3;
+                opacity: 0.2;
             }
         }
 
@@ -267,10 +294,10 @@
             <div id="quizOptions" class="btn-group"></div>
         </div>
 
-        <!-- BƯỚC 5: HIỂN THỊ KẾT QUẢ & ẢNH LỚP KÈM CHỮ CHẠY -->
+        <!-- BƯỚC 5: HIỂN THỊ KẾT QUẢ & ẢNH LỚP KÈM ẢNH RƠI -->
         <div id="stepFinal" class="step">
             <h2>🎁 Quà 20/10 Dành Cho Bạn 🎁</h2>
-            <div class="gift-box">
+            <div class="gift-box" id="giftBoxContainer">
                 <!-- PHẦN CHỮ CHẠY TRÊN ẢNH LỚP -->
                 <div class="running-text-container">
                     <div class="running-text">🌟 Chúc mừng 20/10 tập thể lớp tuyệt vời nhất! Luôn đoàn kết, vui vẻ và rạng rỡ bên nhau nhé! 💖</div>
@@ -408,6 +435,8 @@
             }
         }
 
+        let fallingPhotoInterval = null;
+
         function goToFinalStep() {
             const person = data[selectedNumber];
             const wishElement = document.getElementById('finalWish');
@@ -417,6 +446,11 @@
                 wishElement.innerText = "Chúc bạn có một ngày 20/10 vô cùng ấm áp, vui vẻ và luôn tươi tắn!";
             }
             showStep('stepFinal');
+
+            // Bắt đầu hiệu ứng ảnh rơi tại khung cuối
+            if (!fallingPhotoInterval) {
+                fallingPhotoInterval = setInterval(createFallingMiniPhoto, 1500);
+            }
         }
 
         function showStep(stepId) {
@@ -443,41 +477,51 @@
             }
         }
 
-        // =========================================================
-        // HIỆU ỨNG ẢNH KỶ NIỆM RƠI CHẬM
-        // =========================================================
+        // 1. Hiệu ứng hoa rơi toàn màn hình (chạy xuyên suốt)
+        function createFlower() {
+            const flower = document.createElement('div');
+            flower.classList.add('snowflake');
+            flower.innerHTML = ['🌸', '🌹', '🌷', '✨', '💖'][Math.floor(Math.random() * 5)];
+            flower.style.left = Math.random() * window.innerWidth + 'px';
+            flower.style.fontSize = (Math.random() * 15 + 15) + 'px';
+            
+            const duration = Math.random() * 5 + 5;
+            flower.style.animationDuration = `${duration}s, 3s`;
+            
+            document.body.appendChild(flower);
+
+            setTimeout(() => {
+                flower.remove();
+            }, duration * 1000);
+        }
+
+        setInterval(createFlower, 300);
+
+        // 2. Hiệu ứng ảnh kỷ niệm rơi quanh khung quà cuối
         const photoList = ['anh1.jpg', 'anh2.jpg', 'anh3.jpg', 'anh4.jpg', 'anh5.jpg', 'anh6.jpg', 'anh7.jpg', 'anh8.jpg', 'anh9.jpg'];
 
-        function createFallingPhoto() {
+        function createFallingMiniPhoto() {
+            const container = document.getElementById('giftBoxContainer');
+            if (!container) return;
+
             const img = document.createElement('img');
-            img.classList.add('falling-photo');
+            img.classList.add('falling-mini-photo');
             
-            // Chọn ngẫu nhiên 1 trong 9 bức ảnh
             const randomPhoto = photoList[Math.floor(Math.random() * photoList.length)];
             img.src = randomPhoto;
 
-            // Đặt vị trí ngang ngẫu nhiên trên màn hình
-            img.style.left = Math.random() * window.innerWidth + 'px';
-            
-            // Kích thước ảnh rơi ngẫu nhiên từ 60px đến 90px
-            const size = Math.floor(Math.random() * 30 + 60);
-            img.style.width = size + 'px';
-            img.style.height = size + 'px';
+            // Đặt vị trí ngang ngẫu nhiên bên trong khung
+            img.style.left = Math.random() * (container.offsetWidth - 50) + 'px';
 
-            // Tốc độ rơi chậm (từ 8 đến 14 giây)
-            const duration = Math.random() * 6 + 8;
+            const duration = Math.random() * 4 + 5; // Rơi từ 5 đến 9 giây
             img.style.animationDuration = duration + 's';
 
-            document.body.appendChild(img);
+            container.appendChild(img);
 
-            // Tự động xóa ảnh sau khi rơi xong để tiết kiệm bộ nhớ
             setTimeout(() => {
                 img.remove();
             }, duration * 1000);
         }
-
-        // Cứ mỗi 1.2 giây sẽ xuất hiện thêm một bức ảnh rơi xuống
-        setInterval(createFallingPhoto, 1200);
     </script>
 
 </body>
