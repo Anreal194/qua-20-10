@@ -13,7 +13,7 @@
         }
 
         body {
-            /* Nền không gian huyền bí, tối cao và sang trọng ngay từ đầu */
+            /* Nền không gian tối cao, huyền ảo */
             background: radial-gradient(circle at center, #1b0c30 0%, #05020a 100%);
             min-height: 100vh;
             display: flex;
@@ -36,7 +36,7 @@
             padding: 30px;
             border-radius: 24px;
             border: 1px solid rgba(255, 105, 180, 0.3);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 105, 180, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 105, 180, 0.25);
             max-width: 500px;
             width: 100%;
             text-align: center;
@@ -44,7 +44,7 @@
             z-index: 999;
             opacity: 0;
             transform: scale(0.95) translateY(10px);
-            transition: opacity 0.4s ease, transform 0.4s ease;
+            transition: opacity 0.5s ease, transform 0.5s ease;
             display: none;
         }
 
@@ -54,11 +54,22 @@
             transform: scale(1) translateY(0);
         }
 
+        /* Hiệu ứng chớp sáng dịch chuyển cổng không gian */
+        .warp-effect {
+            animation: warpFlash 0.8s ease-in-out !important;
+        }
+
+        @keyframes warpFlash {
+            0% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.2); filter: brightness(3) blur(2px); opacity: 0.2; }
+            100% { transform: scale(1); filter: brightness(1); opacity: 1; }
+        }
+
         h2 {
             color: #ff66b2;
             margin-bottom: 15px;
             font-size: 24px;
-            text-shadow: 0 0 10px rgba(255, 102, 178, 0.5);
+            text-shadow: 0 0 12px rgba(255, 102, 178, 0.6);
         }
 
         p {
@@ -241,7 +252,7 @@
             background: rgba(50, 30, 70, 0.9);
         }
 
-        /* Hiệu ứng ánh sáng sao/hoa lấp lánh ban đầu */
+        /* Hiệu ứng ánh sáng sao/lấp lánh ban đầu */
         .snowflake {
             position: fixed;
             top: -10px;
@@ -303,8 +314,17 @@
     <button id="musicBtn" onclick="toggleMusic()">🎵</button>
 
     <div class="card active" id="mainCard">
+        <!-- BƯỚC 0: MÀN HÌNH CHÀO MỪNG & DỊCH CHUYỂN TỚI CÁNH CỔNG -->
+        <div id="step0" class="step active">
+            <h2>🌌 Không Gian Kỷ Niệm 🌌</h2>
+            <p>Hệ thống quà tặng 20/10 bí mật đã được khởi tạo. Bạn đã sẵn sàng dịch chuyển xuyên không gian để khám phá chưa?</p>
+            <div class="btn-group" style="margin-top: 25px;">
+                <button onclick="startWarpTransition()">Bắt đầu dịch chuyển 🚀</button>
+            </div>
+        </div>
+
         <!-- BƯỚC 1 -->
-        <div id="step1" class="step active">
+        <div id="step1" class="step">
             <h2>✨ Cổng Không Gian Bí Mật ✨</h2>
             <p>Cho mình hỏi bạn mang số bao nhiêu thế? (Nhập từ 1 đến 41):</p>
             <div class="input-group">
@@ -407,6 +427,17 @@
         let selectedNumber = null;
         let currentQuestionIndex = 0;
 
+        function startWarpTransition() {
+            playMusic();
+            const card = document.getElementById('mainCard');
+            card.classList.add('warp-effect'); // Kích hoạt hiệu ứng dịch chuyển chớp sáng
+
+            setTimeout(() => {
+                card.classList.remove('warp-effect');
+                showStep('step1');
+            }, 700);
+        }
+
         function goToStep2() {
             const num = document.getElementById('numInput').value;
             if (!num || num < 1 || num > 41) {
@@ -414,7 +445,6 @@
                 return;
             }
             selectedNumber = num;
-            playMusic();
             showStep('step2');
         }
 
@@ -537,7 +567,7 @@
             }
         }
 
-        // Hiệu ứng ánh sáng sao/hoa lấp lánh ở các bước đầu
+        // Hiệu ứng ánh sáng sao/lấp lánh
         flowerInterval = setInterval(() => {
             const flower = document.createElement('div');
             flower.classList.add('snowflake');
