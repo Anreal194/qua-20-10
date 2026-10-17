@@ -122,7 +122,7 @@
             border: 2px dashed #ff4081;
             margin-top: 10px;
             position: relative;
-            overflow: hidden; /* Giới hạn hiệu ứng ảnh rơi bên trong hoặc xung quanh quà */
+            overflow: hidden;
         }
 
         .running-text-container {
@@ -189,7 +189,7 @@
             align-items: center;
         }
 
-        /* 1. Hiệu ứng hoa/sao rơi toàn màn hình */
+        /* 1. Hiệu ứng hoa rơi (chạy từ đầu đến hết Bước 4) */
         .snowflake {
             position: fixed;
             top: -10px;
@@ -213,12 +213,12 @@
             100% { transform: translateX(0px); }
         }
 
-        /* 2. Hiệu ứng ảnh kỷ niệm rơi riêng tại phần kết quả */
+        /* 2. Hiệu ứng ảnh kỷ niệm rơi chậm tại Bước 5 */
         .falling-mini-photo {
             position: absolute;
             top: -60px;
-            width: 45px;
-            height: 45px;
+            width: 50px;
+            height: 50px;
             object-fit: cover;
             border-radius: 50%;
             border: 2px solid #ff4081;
@@ -436,8 +436,16 @@
         }
 
         let fallingPhotoInterval = null;
+        let flowerInterval = null;
 
         function goToFinalStep() {
+            // 1. Lập tức dừng và xóa toàn bộ hiệu ứng hoa rơi ở màn hình chính
+            if (flowerInterval) {
+                clearInterval(flowerInterval);
+                flowerInterval = null;
+            }
+            document.querySelectorAll('.snowflake').forEach(el => el.remove());
+
             const person = data[selectedNumber];
             const wishElement = document.getElementById('finalWish');
             if (person) {
@@ -447,7 +455,7 @@
             }
             showStep('stepFinal');
 
-            // Bắt đầu hiệu ứng ảnh rơi tại khung cuối
+            // 2. Bắt đầu hiệu ứng ảnh lớp rơi chậm quanh khung quà cuối
             if (!fallingPhotoInterval) {
                 fallingPhotoInterval = setInterval(createFallingMiniPhoto, 1500);
             }
@@ -477,8 +485,8 @@
             }
         }
 
-        // 1. Hiệu ứng hoa rơi toàn màn hình (chạy xuyên suốt)
-        function createFlower() {
+        // Khởi động hiệu ứng hoa rơi từ đầu
+        flowerInterval = setInterval(() => {
             const flower = document.createElement('div');
             flower.classList.add('snowflake');
             flower.innerHTML = ['🌸', '🌹', '🌷', '✨', '💖'][Math.floor(Math.random() * 5)];
@@ -493,11 +501,9 @@
             setTimeout(() => {
                 flower.remove();
             }, duration * 1000);
-        }
+        }, 300);
 
-        setInterval(createFlower, 300);
-
-        // 2. Hiệu ứng ảnh kỷ niệm rơi quanh khung quà cuối
+        // Hiệu ứng ảnh kỷ niệm rơi quanh khung quà cuối
         const photoList = ['anh1.jpg', 'anh2.jpg', 'anh3.jpg', 'anh4.jpg', 'anh5.jpg', 'anh6.jpg', 'anh7.jpg', 'anh8.jpg', 'anh9.jpg'];
 
         function createFallingMiniPhoto() {
@@ -510,10 +516,9 @@
             const randomPhoto = photoList[Math.floor(Math.random() * photoList.length)];
             img.src = randomPhoto;
 
-            // Đặt vị trí ngang ngẫu nhiên bên trong khung
             img.style.left = Math.random() * (container.offsetWidth - 50) + 'px';
 
-            const duration = Math.random() * 4 + 5; // Rơi từ 5 đến 9 giây
+            const duration = Math.random() * 4 + 5;
             img.style.animationDuration = duration + 's';
 
             container.appendChild(img);
