@@ -37,7 +37,6 @@
             text-align: center;
             position: relative;
             z-index: 999;
-            /* HIỆU ỨNG CHUYỂN CẢNH MƯỢT MÀ CHO CARD */
             opacity: 0;
             transform: scale(0.95) translateY(10px);
             transition: opacity 0.4s ease, transform 0.4s ease;
@@ -147,7 +146,6 @@
             text-align: center;
             position: relative;
             z-index: 1000;
-            /* HIỆU ỨNG CHUYỂN CẢNH MƯỢT MÀ CHO BƯỚC CUỐI */
             opacity: 0;
             transform: scale(0.9) translateY(15px);
             transition: opacity 0.6s ease, transform 0.6s ease;
@@ -246,24 +244,32 @@
             100% { transform: translateX(0px); }
         }
 
-        /* Hiệu ứng ảnh bay lơ lửng không gian màn hình cuối */
-        .space-photo {
+        /* HIỆU ỨNG 100 ẢNH RƠI CHẬM RÃI TỪ TRÊN XUỐNG Ở BƯỚC CUỐI */
+        .falling-photo-fullscreen {
             position: fixed;
-            width: 70px;
-            height: 70px;
+            top: -100px;
+            z-index: 998;
+            width: 65px;
+            height: 65px;
             object-fit: cover;
             border-radius: 50%;
             border: 2px solid #ff4081;
-            box-shadow: 0 0 15px rgba(255, 64, 129, 0.6);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
             pointer-events: none;
-            z-index: 990;
-            animation: floatAround 8s ease-in-out infinite alternate;
+            animation: fallPhotoFull linear infinite;
         }
 
-        @keyframes floatAround {
-            0% { transform: translate(0, 0) scale(0.9) rotate(0deg); opacity: 0.7; }
-            50% { transform: translate(30px, -40px) scale(1.1) rotate(15deg); opacity: 1; }
-            100% { transform: translate(-20px, 30px) scale(1) rotate(-15deg); opacity: 0.7; }
+        @keyframes fallPhotoFull {
+            0% {
+                top: -100px;
+                transform: rotate(0deg);
+                opacity: 0.95;
+            }
+            100% {
+                top: 105vh;
+                transform: rotate(360deg);
+                opacity: 0.3;
+            }
         }
     </style>
 </head>
@@ -321,7 +327,7 @@
             <div class="running-text">🌟 Chúc mừng 20/10 tập thể lớp tuyệt vời nhất! Luôn đoàn kết, vui vẻ và rạng rỡ bên nhau nhé! 💖</div>
         </div>
         <p id="finalWish" style="font-size: 15px; color: #fff; font-weight: bold; margin-bottom: 10px;"></p>
-        <img id="finalImg" src="lop.jpg" alt="Ảnh tập thể lớp">[cite: 5]
+        <img id="finalImg" src="lop.jpg" alt="Ảnh tập thể lớp">
     </div>
 
     <script>
@@ -450,6 +456,7 @@
             }
         }
 
+        let photoRainInterval = null;
         let flowerInterval = null;
 
         function goToFinalStep() {
@@ -459,7 +466,7 @@
             }
             document.querySelectorAll('.snowflake').forEach(el => el.remove());
             
-            // Hiệu ứng mờ dần card chính trước khi ẩn đi
+            // Hiệu ứng mờ dần card chính trước khi chuyển cảnh
             const mainCard = document.getElementById('mainCard');
             mainCard.style.opacity = '0';
             mainCard.style.transform = 'scale(0.95)';
@@ -476,12 +483,15 @@
                     wishElement.innerText = "Chúc bạn có một ngày 20/10 vô cùng ấm áp, vui vẻ và luôn tươi tắn!";
                 }
 
-                // Hiện khung quà cuối với hiệu ứng trượt/phóng to mượt mà
+                // Hiện khung quà cuối mượt mà
                 const finalStep = document.getElementById('stepFinal');
                 finalStep.style.display = 'block';
                 setTimeout(() => finalStep.classList.add('active'), 50);
 
-                createFloatingSpacePhotos();
+                // Bắt đầu hiệu ứng 100 ảnh kỷ niệm rơi chậm từ trên đỉnh xuống toàn màn hình
+                if (!photoRainInterval) {
+                    photoRainInterval = setInterval(createFullscreenFallingPhoto, 900);
+                }
             }, 400);
         }
 
@@ -509,7 +519,7 @@
             }
         }
 
-        // Khởi động hoa rơi ban đầu
+        // Khởi động hoa rơi từ đầu
         flowerInterval = setInterval(() => {
             const flower = document.createElement('div');
             flower.classList.add('snowflake');
@@ -527,23 +537,30 @@
             }, duration * 1000);
         }, 300);
 
-        const photoList = ['anh1.jpg', 'anh2.jpg', 'anh3.jpg', 'anh4.jpg', 'anh5.jpg', 'anh6.jpg', 'anh7.jpg', 'anh8.jpg', 'anh9.jpg'];
+        // Tự động tạo mảng từ anh1.jpg đến anh100.jpg
+        const photoList = [];
+        for (let i = 1; i <= 100; i++) {
+            photoList.push(`anh${i}.jpg`);
+        }
 
-        function createFloatingSpacePhotos() {
-            for (let i = 0; i < 12; i++) {
-                const img = document.createElement('img');
-                img.classList.add('space-photo');
-                
-                const randomPhoto = photoList[Math.floor(Math.random() * photoList.length)];
-                img.src = randomPhoto;
+        function createFullscreenFallingPhoto() {
+            const img = document.createElement('img');
+            img.classList.add('falling-photo-fullscreen');
+            
+            const randomPhoto = photoList[Math.floor(Math.random() * photoList.length)];
+            img.src = randomPhoto;
 
-                img.style.left = Math.random() * (window.innerWidth - 100) + 'px';
-                img.style.top = Math.random() * (window.innerHeight - 100) + 'px';
-                img.style.animationDuration = (Math.random() * 4 + 6) + 's';
-                img.style.animationDelay = (Math.random() * 2) + 's';
+            img.style.left = Math.random() * window.innerWidth + 'px';
 
-                document.body.appendChild(img);
-            }
+            // Tốc độ rơi chậm rãi lả tả từ 7 đến 11 giây
+            const duration = Math.random() * 4 + 7;
+            img.style.animationDuration = duration + 's';
+
+            document.body.appendChild(img);
+
+            setTimeout(() => {
+                img.remove();
+            }, duration * 1000);
         }
     </script>
 
