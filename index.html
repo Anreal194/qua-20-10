@@ -20,6 +20,11 @@
             align-items: center;
             padding: 20px;
             overflow-x: hidden;
+            transition: background 1s ease-in-out;
+        }
+
+        body.space-background {
+            background: radial-gradient(circle at center, #2b1055 0%, #000000 100%);
         }
 
         .card {
@@ -30,9 +35,19 @@
             max-width: 500px;
             width: 100%;
             text-align: center;
-            animation: fadeIn 0.5s ease-in-out;
             position: relative;
             z-index: 999;
+            /* HIỆU ỨNG CHUYỂN CẢNH MƯỢT MÀ CHO CARD */
+            opacity: 0;
+            transform: scale(0.95) translateY(10px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            display: none;
+        }
+
+        .card.active {
+            display: block;
+            opacity: 1;
+            transform: scale(1) translateY(0);
         }
 
         h2 {
@@ -113,29 +128,51 @@
 
         .step.active {
             display: block;
+            animation: fadeInStep 0.4s ease-in-out;
+        }
+
+        @keyframes fadeInStep {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .gift-box {
-            background: #fff0f5;
-            padding: 15px;
-            border-radius: 15px;
-            border: 2px dashed #ff4081;
-            margin-top: 10px;
+            background: rgba(30, 30, 40, 0.9);
+            padding: 20px;
+            border-radius: 20px;
+            border: 2px solid #ff4081;
+            box-shadow: 0 0 25px rgba(255, 64, 129, 0.4);
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 1000;
+            /* HIỆU ỨNG CHUYỂN CẢNH MƯỢT MÀ CHO BƯỚC CUỐI */
+            opacity: 0;
+            transform: scale(0.9) translateY(15px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            display: none;
+        }
+
+        .gift-box.active {
+            display: block;
+            opacity: 1;
+            transform: scale(1) translateY(0);
         }
 
         .running-text-container {
             overflow: hidden;
             white-space: nowrap;
-            background: rgba(255, 192, 203, 0.3);
+            background: rgba(255, 192, 203, 0.2);
             border-radius: 8px;
             padding: 8px 0;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .running-text {
             display: inline-block;
             animation: marquee 12s linear infinite;
-            color: #d81b60;
+            color: #ff80bf;
             font-weight: bold;
             font-size: 15px;
         }
@@ -149,7 +186,7 @@
             max-width: 100%;
             height: auto;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
         .comment-text {
@@ -170,7 +207,7 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            z-index: 1000;
+            z-index: 1005;
             background: rgba(255, 255, 255, 0.9);
             border: 2px solid #ff4081;
             color: #d81b60;
@@ -185,7 +222,7 @@
             align-items: center;
         }
 
-        /* 1. Hiệu ứng hoa rơi (từ đầu đến hết Bước 4) */
+        /* Hiệu ứng hoa rơi */
         .snowflake {
             position: fixed;
             top: -10px;
@@ -209,37 +246,24 @@
             100% { transform: translateX(0px); }
         }
 
-        /* 2. Hiệu ứng 9 ảnh kỷ niệm rơi toàn màn hình từ đỉnh xuống (ở Bước 5) */
-        .falling-photo-fullscreen {
+        /* Hiệu ứng ảnh bay lơ lửng không gian màn hình cuối */
+        .space-photo {
             position: fixed;
-            top: -100px;
-            z-index: 998;
-            width: 65px;
-            height: 65px;
+            width: 70px;
+            height: 70px;
             object-fit: cover;
             border-radius: 50%;
             border: 2px solid #ff4081;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+            box-shadow: 0 0 15px rgba(255, 64, 129, 0.6);
             pointer-events: none;
-            animation: fallPhotoFull linear infinite;
+            z-index: 990;
+            animation: floatAround 8s ease-in-out infinite alternate;
         }
 
-        @keyframes fallPhotoFull {
-            0% {
-                top: -100px;
-                transform: rotate(0deg);
-                opacity: 0.95;
-            }
-            100% {
-                top: 105vh;
-                transform: rotate(360deg);
-                opacity: 0.3;
-            }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+        @keyframes floatAround {
+            0% { transform: translate(0, 0) scale(0.9) rotate(0deg); opacity: 0.7; }
+            50% { transform: translate(30px, -40px) scale(1.1) rotate(15deg); opacity: 1; }
+            100% { transform: translate(-20px, 30px) scale(1) rotate(-15deg); opacity: 0.7; }
         }
     </style>
 </head>
@@ -251,7 +275,7 @@
 
     <button id="musicBtn" onclick="toggleMusic()">🎵</button>
 
-    <div class="card">
+    <div class="card active" id="mainCard">
         <!-- BƯỚC 1 -->
         <div id="step1" class="step active">
             <h2>🌸 Chào Bạn! 🌸</h2>
@@ -289,20 +313,15 @@
             <p id="quizFeedback" style="color: #ff1744; font-weight: bold; min-height: 24px; margin-bottom: 10px;"></p>
             <div id="quizOptions" class="btn-group"></div>
         </div>
+    </div>
 
-        <!-- BƯỚC 5: HIỂN THỊ KẾT QUẢ & ẢNH LỚP KÈM ẢNH RƠI TOÀN MÀN HÌNH -->
-        <div id="stepFinal" class="step">
-            <h2>🎁 Quà 20/10 Dành Cho Bạn 🎁</h2>
-            <div class="gift-box">
-                <!-- PHẦN CHỮ CHẠY TRÊN ẢNH LỚP -->
-                <div class="running-text-container">
-                    <div class="running-text">🌟 Chúc mừng 20/10 tập thể lớp tuyệt vời nhất! Luôn đoàn kết, vui vẻ và rạng rỡ bên nhau nhé! 💖</div>
-                </div>
-                <p id="finalWish" style="font-size: 15px; color: #333; font-weight: bold; margin-bottom: 10px;"></p>
-                <!-- HIỂN THỊ ẢNH LỚP -->
-                <img id="finalImg" src="lop.jpg" alt="Ảnh tập thể lớp">
-            </div>
+    <!-- BƯỚC 5: KẾT QUẢ CUỐI CÙNG -->
+    <div class="gift-box" id="stepFinal">
+        <div class="running-text-container">
+            <div class="running-text">🌟 Chúc mừng 20/10 tập thể lớp tuyệt vời nhất! Luôn đoàn kết, vui vẻ và rạng rỡ bên nhau nhé! 💖</div>
         </div>
+        <p id="finalWish" style="font-size: 15px; color: #fff; font-weight: bold; margin-bottom: 10px;"></p>
+        <img id="finalImg" src="lop.jpg" alt="Ảnh tập thể lớp">[cite: 5]
     </div>
 
     <script>
@@ -431,30 +450,39 @@
             }
         }
 
-        let photoRainInterval = null;
         let flowerInterval = null;
 
         function goToFinalStep() {
-            // 1. Dừng và xóa hoàn toàn hoa rơi
             if (flowerInterval) {
                 clearInterval(flowerInterval);
                 flowerInterval = null;
             }
             document.querySelectorAll('.snowflake').forEach(el => el.remove());
+            
+            // Hiệu ứng mờ dần card chính trước khi ẩn đi
+            const mainCard = document.getElementById('mainCard');
+            mainCard.style.opacity = '0';
+            mainCard.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                mainCard.classList.remove('active');
+                document.body.classList.add('space-background');
 
-            const person = data[selectedNumber];
-            const wishElement = document.getElementById('finalWish');
-            if (person) {
-                wishElement.innerText = person.wish;
-            } else {
-                wishElement.innerText = "Chúc bạn có một ngày 20/10 vô cùng ấm áp, vui vẻ và luôn tươi tắn!";
-            }
-            showStep('stepFinal');
+                const person = data[selectedNumber];
+                const wishElement = document.getElementById('finalWish');
+                if (person) {
+                    wishElement.innerText = person.wish;
+                } else {
+                    wishElement.innerText = "Chúc bạn có một ngày 20/10 vô cùng ấm áp, vui vẻ và luôn tươi tắn!";
+                }
 
-            // 2. Bắt đầu hiệu ứng 9 ảnh mẫu rơi toàn màn hình từ đỉnh xuống
-            if (!photoRainInterval) {
-                photoRainInterval = setInterval(createFullscreenFallingPhoto, 1000);
-            }
+                // Hiện khung quà cuối với hiệu ứng trượt/phóng to mượt mà
+                const finalStep = document.getElementById('stepFinal');
+                finalStep.style.display = 'block';
+                setTimeout(() => finalStep.classList.add('active'), 50);
+
+                createFloatingSpacePhotos();
+            }, 400);
         }
 
         function showStep(stepId) {
@@ -481,7 +509,7 @@
             }
         }
 
-        // Khởi động hoa rơi từ đầu
+        // Khởi động hoa rơi ban đầu
         flowerInterval = setInterval(() => {
             const flower = document.createElement('div');
             flower.classList.add('snowflake');
@@ -499,27 +527,23 @@
             }, duration * 1000);
         }, 300);
 
-        // Danh sách 9 tấm ảnh mẫu bạn đã cung cấp (anh1.jpg đến anh9.jpg)
         const photoList = ['anh1.jpg', 'anh2.jpg', 'anh3.jpg', 'anh4.jpg', 'anh5.jpg', 'anh6.jpg', 'anh7.jpg', 'anh8.jpg', 'anh9.jpg'];
 
-        function createFullscreenFallingPhoto() {
-            const img = document.createElement('img');
-            img.classList.add('falling-photo-fullscreen');
-            
-            const randomPhoto = photoList[Math.floor(Math.random() * photoList.length)];
-            img.src = randomPhoto;
+        function createFloatingSpacePhotos() {
+            for (let i = 0; i < 12; i++) {
+                const img = document.createElement('img');
+                img.classList.add('space-photo');
+                
+                const randomPhoto = photoList[Math.floor(Math.random() * photoList.length)];
+                img.src = randomPhoto;
 
-            // Vị trí ngang ngẫu nhiên trên toàn màn hình
-            img.style.left = Math.random() * window.innerWidth + 'px';
+                img.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+                img.style.top = Math.random() * (window.innerHeight - 100) + 'px';
+                img.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                img.style.animationDelay = (Math.random() * 2) + 's';
 
-            const duration = Math.random() * 4 + 7; // Rơi từ 7 đến 11 giây
-            img.style.animationDuration = duration + 's';
-
-            document.body.appendChild(img);
-
-            setTimeout(() => {
-                img.remove();
-            }, duration * 1000);
+                document.body.appendChild(img);
+            }
         }
     </script>
 
