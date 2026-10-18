@@ -212,29 +212,7 @@
             background: rgba(55, 20, 45, 0.9);
         }
 
-        .snowflake {
-            position: fixed;
-            top: -10px;
-            z-index: 998;
-            user-select: none;
-            cursor: default;
-            animation-name: fall, shake;
-            animation-duration: 10s, 3s;
-            animation-timing-function: linear, ease-in-out;
-            animation-iteration-count: infinite, infinite;
-        }
-
-        @keyframes fall {
-            0% { top: -10px; }
-            100% { top: 105vh; }
-        }
-
-        @keyframes shake {
-            0% { transform: translateX(0px); }
-            50% { transform: translateX(80px); }
-            100% { transform: translateX(0px); }
-        }
-
+        /* Giao diện 3D Galaxy & Thư */
         #rotate-warning {
             position: fixed; left: 0; right: 0; bottom: 14px;
             display: none; text-align: center; color: #ffd6f0; font-size: 14px;
@@ -365,12 +343,29 @@
         .lt-p { font: 700 22px/1.55 'Dancing Script', 'Be Vietnam Pro', cursive; margin: 0; }
         .lt-gap { height: 12px; }
         .lt-sign { text-align: right; font: 400 21px/1.5 'Pacifico', cursive; color: #c2275f; margin-top: 4px; }
+        .lt-w { display: inline-block; opacity: 0; filter: blur(7px); transform: translateY(8px); transition: opacity .9s ease, filter .9s ease, transform .9s ease; }
+        .lt-w.in { opacity: 1; filter: blur(0); transform: none; }
         #letter-done {
             display: block; margin: 18px auto 0; padding: 11px 30px; border-radius: 999px;
             border: 1px solid rgba(194, 39, 95, .4); background: rgba(255, 90, 150, .18); color: #a21b55;
             font: 400 15px 'Pacifico', cursive; cursor: pointer; opacity: 0; pointer-events: none; transition: opacity 1.2s ease;
         }
         #letter-done.in { opacity: 1; pointer-events: auto; }
+
+        #photo-rise { position: fixed; inset: 0; z-index: 8; pointer-events: none; overflow: hidden; }
+        .pr-card {
+            position: absolute; top: 100%; box-sizing: border-box; padding: 0; border-radius: 18px;
+            opacity: 0; will-change: transform, opacity; animation: prRise var(--dur) linear forwards;
+        }
+        .pr-card img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 18px; }
+        .pr-fallback { width: 100%; height: 100%; border-radius: 12px; display: grid; place-items: center; font-size: 34px; color: #ffd6ec; background: radial-gradient(circle at 30% 25%, #ff9ccd, #b02a72 75%); }
+        @keyframes prRise {
+            0%   { transform: translate3d(0, 0, 0) rotate(var(--r0)) scale(var(--sc)); opacity: 0; }
+            10%  { opacity: var(--op); }
+            50%  { transform: translate3d(var(--sw), -62vh, 0) rotate(var(--r1)) scale(var(--sc)); }
+            90%  { opacity: var(--op); }
+            100% { transform: translate3d(calc(var(--sw) * -0.6), -130vh, 0) rotate(var(--r0)) scale(var(--sc)); opacity: 0; }
+        }
         @keyframes tapPulse {
             0%, 100% { transform: translateX(-50%) translateY(0) scale(1); }
             50%      { transform: translateX(-50%) translateY(0) scale(1.06); }
@@ -459,7 +454,7 @@
         </div>
     </div>
 
-    <!-- KHU VỰC 3D GALAXY -->
+    <!-- KHU VỰC 3D GALAXY (HIỆN Ở CUỐI TRẮC NGHIỆM) -->
     <div id="container"></div>
     <div id="rotate-warning">📱 Xoay ngang điện thoại để xem đẹp hơn</div>
     <button id="tap-btn" type="button">♡ Chạm vào màn hình ♡</button>
@@ -489,50 +484,52 @@
       </div>
     </div>
 
-    <!-- SỬA LỖI: Thêm type="module" để trình duyệt hiểu cú pháp import Three.js -->
     <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
         const data = {
-            1: { name: "Nguyễn Hoàng Gia An", wish: "Chúc bạn Nguyễn Hoàng Gia An luôn mạnh mẽ, học tập thật đỉnh, luôn giữ vững phong độ và gặt hái thật nhiều thành công nhé! 💪🔥" },
-            2: { name: "Nguyễn Trâm Anh", wish: "Chúc bạn Nguyễn Trâm Anh một ngày 20/10 thật nhiều hoa, quà và nụ cười rạng rỡ!" },
-            3: { name: "Trương Thị Phương Anh", wish: "Chúc bạn Trương Thị Phương Anh luôn tươi trẻ, tràn đầy năng lượng và đạt được mọi ước mơ!" },
-            4: { name: "Trần Xuân Việt Bách", wish: "Chúc bạn Trần Xuân Việt Bách luôn tràn đầy năng lượng nam tính, học giỏi, chơi hết mình và luôn thành công trong mọi dự định! 🚀" },
-            5: { name: "Nguyễn Ngọc Bảo Chi", wish: "Chúc bạn Nguyễn Ngọc Bảo Chi ngày 20/10 ngập tràn niềm vui, luôn là cô gái đáng yêu và tỏa sáng!" },
-            6: { name: "Bùi Thị Thùy Dương", wish: "Chúc bạn Bùi Thị Thùy Dương luôn luôn vui tươi, gặp nhiều may mắn và hạnh phúc trong cuộc sống!" },
-            7: { name: "Lê Phương Đan", wish: "Chúc bạn Lê Phương Đan một ngày 20/10 thật ý nghĩa, luôn tự tin và thành công trên con đường học tập!" },
-            8: { name: "Nguyễn Thành Đạt", wish: "Chúc bạn Nguyễn Thành Đạt luôn phong độ, chất chơi, đạt kết quả cao ngất ngưởng trong học tập và luôn thành công! 🎯" },
-            9: { name: "Cao Hải Đăng", wish: "Chúc bạn Cao Hải Đăng luôn tỏa sáng như ngọn hải đăng, học tập tiến bộ không ngừng và luôn vui vẻ mỗi ngày! ⚓" },
-            10: { name: "Nguyễn Hoàng Trúc Giang", wish: "Chúc bạn Nguyễn Hoàng Trúc Giang luôn xinh tươi, rạng rỡ và có một ngày 20/10 thật tuyệt vời!" },
-            11: { name: "Nguyễn Ngọc Vân Hà", wish: "Chúc bạn Nguyễn Ngọc Vân Hà luôn hạnh phúc, gặp nhiều may mắn và gặt hái thật nhiều điểm 10!" },
-            12: { name: "Nguyễn Trần Gia Hân", wish: "Chúc bạn Nguyễn Trần Gia Hân luôn vui vẻ, đáng yêu và gặt hái được nhiều thành công trong học tập!" },
-            13: { name: "Trịnh Đình Thư Kỳ", wish: "Chúc bạn Trịnh Đình Thư Kỳ luôn tràn đầy năng lượng tích cực và có một ngày 20/10 trọn vẹn niềm vui!" },
-            14: { name: "Điện Thảo Linh", wish: "Chúc bạn Điện Thảo Linh luôn xinh đẹp, giỏi giang và có thật nhiều kỷ niệm đẹp trong năm học này nhé!" },
-            15: { name: "Lê Thị Mai Linh", wish: "Chúc bạn Lê Thị Mai Linh luôn vui tươi, trẻ trung và đạt được mọi mục tiêu mà mình mong muốn!" },
-            16: { name: "Hồ Trúc Ly", wish: "Chúc bạn Hồ Trúc Ly một ngày 20/10 ngập tràn quà bánh, hoa tươi và luôn mỉm cười rạng rỡ!" },
-            17: { name: "Nguyễn Thiều Trà My", wish: "Chúc bạn Nguyễn Thiều Trà My luôn tự tin, học giỏi và luôn là người truyền năng lượng tích cực đến mọi người!" },
-            18: { name: "Võ Ngọc Trà My", wish: "Chúc bạn Võ Ngọc Trà My ngày 20/10 thật ý nghĩa, luôn xinh xắn và đạt thành tích cao trong học tập!" },
-            19: { name: "Đỗ Thanh Ngọc", wish: "Chúc bạn Đỗ Thanh Ngọc luôn vui vẻ, bình an và gặt hái được thật nhiều thành công rực rỡ!" },
-            20: { name: "Phạm Lữ Nguyên Ngọc", wish: "Chúc bạn Phạm Lữ Nguyên Ngọc luôn tỏa sáng, học tập tốt và có một ngày 20/10 thật đáng nhớ!" },
-            21: { name: "Lê Uyên Nhi", wish: "Chúc bạn Lê Uyên Nhi luôn xinh đẹp, ngọt ngào và đạt được mọi ước mơ trong tương lai!" },
-            22: { name: "Ngô Thị Yến Nhi", wish: "Chúc bạn Ngô Thị Yến Nhi luôn giữ được nụ cười tươi tắn, học giỏi và luôn gặp nhiều may mắn!" },
-            23: { name: "Trần Lê Yến Nhi", wish: "Chúc bạn Trần Lê Yến Nhi ngày 20/10 ngập tràn niềm vui, luôn tự tin và thành công trên mọi con đường!" },
-            24: { name: "Nguyễn Ngọc Minh Phương", wish: "Chúc bạn Nguyễn Ngọc Minh Phương luôn thông minh, xinh xắn và có một mùa 20/10 thật hạnh phúc!" },
-            25: { name: "Nguyễn Đắc Khánh Quỳnh", wish: "Chúc bạn Nguyễn Đắc Khánh Quỳnh luôn vui tươi, tràn đầy sức sống và đạt kết quả cao trong học tập!" },
-            26: { name: "Bùi Đỗ Phương Thúy", wish: "Chúc bạn Bùi Đỗ Phương Thúy luôn xinh đẹp, giỏi giang và gặt hái được thật nhiều thành tựu mới!" },
-            27: { name: "Bùi Ngọc Anh Thư", wish: "Chúc bạn Bùi Ngọc Anh Thư luôn rạng rỡ, đáng yêu và có một ngày 20/10 tràn ngập yêu thương!" },
-            28: { name: "Lê Nguyễn Anh Thư", wish: "Chúc bạn Lê Nguyễn Anh Thư luôn giữ vững tinh thần học tập hăng say và luôn vui vẻ mỗi ngày!" },
-            29: { name: "Phan Hoàng Minh Thư", wish: "Chúc bạn Phan Hoàng Minh Thư ngày 20/10 thật trọn vẹn, luôn tự tin và gặt hái nhiều điểm tốt!" },
-            30: { name: "Phạm Trần Hoài Thương", wish: "Chúc bạn Phạm Trần Hoài Thương luôn ấm áp, được yêu thương nhiều hơn và thành công trong cuộc sống!" },
-            31: { name: "Phạm Lê Bảo Thy", wish: "Chúc bạn Phạm Lê Bảo Thy luôn xinh xắn, năng động và luôn đạt kết quả xuất sắc trong học tập!" },
-            32: { name: "Nguyễn Thị Thủy Tiên", wish: "Chúc bạn Nguyễn Thị Thủy Tiên luôn rạng rỡ như đóa hoa tiên, gặp nhiều may mắn và luôn vui vẻ!" },
-            33: { name: "Nguyễn Trần Thiên Trang", wish: "Chúc bạn Nguyễn Trần Thiên Trang luôn duyên dáng, học giỏi và có một ngày 20/10 thật đáng nhớ!" },
-            34: { name: "Ngô Thùy Trâm", wish: "Chúc bạn Ngô Thùy Trâm luôn tràn đầy năng lượng, tự tin và đạt được mọi hoài bão của mình!" },
-            35: { name: "Nguyễn Ngọc Nhã Trúc", wish: "Chúc bạn Nguyễn Ngọc Nhã Trúc luôn dịu dàng, đáng yêu và gặt hái thật nhiều thành công!" },
-            36: { name: "Mai Phạm Bảo Uyên", wish: "Chúc bạn Mai Phạm Bảo Uyên luôn vui tươi, gặp nhiều điều tốt đẹp và luôn là niềm tự hào của mọi người!" },
-            37: { name: "Đặng Nguyễn Tường Vi", wish: "Chúc bạn Đặng Nguyễn Tường Vi luôn tươi vui như đóa hoa tường vi, học giỏi và luôn hạnh phúc!" },
-            38: { name: "Nguyễn Thị Tường Vi", wish: "Chúc bạn Nguyễn Thị Tường Vi một ngày 20/10 ngập tràn niềm vui, luôn tự tin và đạt thành tích cao!" },
-            39: { name: "Lý Hữu Triệu Vinh", wish: "Chúc bạn Lý Hữu Triệu Vinh luôn bản lĩnh, phong độ đỉnh cao, học tập tiến bộ và chinh phục mọi mục tiêu đề ra! ⚡" },
-            40: { name: "Nguyễn Ngọc Tường Vy", wish: "Chúc bạn Nguyễn Ngọc Tường Vy luôn xinh đẹp, rạng ngời và có một ngày lễ 20/10 tuyệt vời nhất!" },
-            41: { name: "Trần Như Ý", wish: "Chúc bạn Trần Như Ý vạn sự như ý, luôn vui vẻ, học giỏi và gặt hái nhiều thành công trong cuộc sống!" }
+            1: { name: "Nguyễn Hoàng Gia An", wish: "Gửi bạn Nguyễn Hoàng Gia An,\n\nHôm nay là 20/10, chúc bạn luôn mạnh mẽ, học tập thật đỉnh, luôn giữ vững phong độ và gặt hái thật nhiều thành công nhé! 💪🔥\n\n— NAMDEX" },
+            2: { name: "Nguyễn Trâm Anh", wish: "Gửi bạn Nguyễn Trâm Anh,\n\nChúc bạn một ngày 20/10 thật nhiều hoa, quà và nụ cười rạng rỡ nhất!\n\n— NAMDEX" },
+            3: { name: "Trương Thị Phương Anh", wish: "Gửi bạn Trương Thị Phương Anh,\n\nChúc bạn luôn tươi trẻ, tràn đầy năng lượng và đạt được mọi ước mơ của mình!\n\n— NAMDEX" },
+            4: { name: "Trần Xuân Việt Bách", wish: "Gửi bạn Trần Xuân Việt Bách,\n\nChúc bạn luôn tràn đầy năng lượng nam tính, học giỏi, chơi hết mình và luôn thành công trong mọi dự định! 🚀\n\n— NAMDEX" },
+            5: { name: "Nguyễn Ngọc Bảo Chi", wish: "Gửi bạn Nguyễn Ngọc Bảo Chi,\n\nNgày 20/10 ngập tràn niềm vui, luôn là cô gái đáng yêu và tỏa sáng nhé!\n\n— NAMDEX" },
+            6: { name: "Bùi Thị Thùy Dương", wish: "Gửi bạn Bùi Thị Thùy Dương,\n\nChúc bạn luôn luôn vui tươi, gặp nhiều may mắn và hạnh phúc trong cuộc sống!\n\n— NAMDEX" },
+            7: { name: "Lê Phương Đan", wish: "Gửi bạn Lê Phương Đan,\n\nMột ngày 20/10 thật ý nghĩa, luôn tự tin và thành công trên con đường học tập!\n\n— NAMDEX" },
+            8: { name: "Nguyễn Thành Đạt", wish: "Gửi bạn Nguyễn Thành Đạt,\n\nChúc bạn luôn phong độ, chất chơi, đạt kết quả cao ngất ngưởng trong học tập và luôn thành công! 🎯\n\n— NAMDEX" },
+            9: { name: "Cao Hải Đăng", wish: "Gửi bạn Cao Hải Đăng,\n\nLuôn tỏa sáng như ngọn hải đăng, học tập tiến bộ không ngừng và luôn vui vẻ mỗi ngày! ⚓\n\n— NAMDEX" },
+            10: { name: "Nguyễn Hoàng Trúc Giang", wish: "Gửi bạn Nguyễn Hoàng Trúc Giang,\n\nLuôn xinh tươi, rạng rỡ và có một ngày 20/10 thật tuyệt vời!\n\n— NAMDEX" },
+            11: { name: "Nguyễn Ngọc Vân Hà", wish: "Gửi bạn Nguyễn Ngọc Vân Hà,\n\nLuôn hạnh phúc, gặp nhiều may mắn và gặt hái thật nhiều điểm 10!\n\n— NAMDEX" },
+            12: { name: "Nguyễn Trần Gia Hân", wish: "Gửi bạn Nguyễn Trần Gia Hân,\n\nLuôn vui vẻ, đáng yêu và gặt hái được nhiều thành công trong học tập!\n\n— NAMDEX" },
+            13: { name: "Trịnh Đình Thư Kỳ", wish: "Gửi bạn Trịnh Đình Thư Kỳ,\n\nLuôn tràn đầy năng lượng tích cực và có một ngày 20/10 trọn vẹn niềm vui!\n\n— NAMDEX" },
+            14: { name: "Điện Thảo Linh", wish: "Gửi bạn Điện Thảo Linh,\n\nLuôn xinh đẹp, giỏi giang và có thật nhiều kỷ niệm đẹp trong năm học này nhé!\n\n— NAMDEX" },
+            15: { name: "Lê Thị Mai Linh", wish: "Gửi bạn Lê Thị Mai Linh,\n\nLuôn vui tươi, trẻ trung và đạt được mọi mục tiêu mà mình mong muốn!\n\n— NAMDEX" },
+            16: { name: "Hồ Trúc Ly", wish: "Gửi bạn Hồ Trúc Ly,\n\nMột ngày 20/10 ngập tràn quà bánh, hoa tươi và luôn mỉm cười rạng rỡ!\n\n— NAMDEX" },
+            17: { name: "Nguyễn Thiều Trà My", wish: "Gửi bạn Nguyễn Thiều Trà My,\n\nLuôn tự tin, học giỏi và luôn là người truyền năng lượng tích cực đến mọi người!\n\n— NAMDEX" },
+            18: { name: "Võ Ngọc Trà My", wish: "Gửi bạn Võ Ngọc Trà My,\n\nNgày 20/10 thật ý nghĩa, luôn xinh xắn và đạt thành tích cao trong học tập!\n\n— NAMDEX" },
+            19: { name: "Đỗ Thanh Ngọc", wish: "Gửi bạn Đỗ Thanh Ngọc,\n\nLuôn vui vẻ, bình an và gặt hái được thật nhiều thành công rực rỡ!\n\n— NAMDEX" },
+            20: { name: "Phạm Lữ Nguyên Ngọc", wish: "Gửi bạn Phạm Lữ Nguyên Ngọc,\n\nLuôn tỏa sáng, học tập tốt và có một ngày 20/10 thật đáng nhớ!\n\n— NAMDEX" },
+            21: { name: "Lê Uyên Nhi", wish: "Gửi bạn Lê Uyên Nhi,\n\nLuôn xinh đẹp, ngọt ngào và đạt được mọi ước mơ trong tương lai!\n\n— NAMDEX" },
+            22: { name: "Ngô Thị Yến Nhi", wish: "Gửi bạn Ngô Thị Yến Nhi,\n\nLuôn giữ được nụ cười tươi tắn, học giỏi và luôn gặp nhiều may mắn!\n\n— NAMDEX" },
+            23: { name: "Trần Lê Yến Nhi", wish: "Gửi bạn Trần Lê Yến Nhi,\n\nNgày 20/10 ngập tràn niềm vui, luôn tự tin và thành công trên mọi con đường!\n\n— NAMDEX" },
+            24: { name: "Nguyễn Ngọc Minh Phương", wish: "Gửi bạn Nguyễn Ngọc Minh Phương,\n\nLuôn thông minh, xinh xắn và có một mùa 20/10 thật hạnh phúc!\n\n— NAMDEX" },
+            25: { name: "Nguyễn Đắc Khánh Quỳnh", wish: "Gửi bạn Nguyễn Đắc Khánh Quỳnh,\n\nLuôn vui tươi, tràn đầy sức sống và đạt kết quả cao trong học tập!\n\n— NAMDEX" },
+            26: { name: "Bùi Đỗ Phương Thúy", wish: "Gửi bạn Bùi Đỗ Phương Thúy,\n\nLuôn xinh đẹp, giỏi giang và gặt hái được thật nhiều thành tựu mới!\n\n— NAMDEX" },
+            27: { name: "Bùi Ngọc Anh Thư", wish: "Gửi bạn Bùi Ngọc Anh Thư,\n\nLuôn rạng rỡ, đáng yêu và có một ngày 20/10 tràn ngập yêu thương!\n\n— NAMDEX" },
+            28: { name: "Lê Nguyễn Anh Thư", wish: "Gửi bạn Lê Nguyễn Anh Thư,\n\nLuôn giữ vững tinh thần học tập hăng say và luôn vui vẻ mỗi ngày!\n\n— NAMDEX" },
+            29: { name: "Phan Hoàng Minh Thư", wish: "Gửi bạn Phan Hoàng Minh Thư,\n\nNgày 20/10 thật trọn vẹn, luôn tự tin và gặt hái nhiều điểm tốt!\n\n— NAMDEX" },
+            30: { name: "Phạm Trần Hoài Thương", wish: "Gửi bạn Phạm Trần Hoài Thương,\n\nLuôn ấm áp, được yêu thương nhiều hơn và thành công trong cuộc sống!\n\n— NAMDEX" },
+            31: { name: "Phạm Lê Bảo Thy", wish: "Gửi bạn Phạm Lê Bảo Thy,\n\nLuôn xinh xắn, năng động và luôn đạt kết quả xuất sắc trong học tập!\n\n— NAMDEX" },
+            32: { name: "Nguyễn Thị Thủy Tiên", wish: "Gửi bạn Nguyễn Thị Thủy Tiên,\n\nLuôn rạng rỡ như đóa hoa tiên, gặp nhiều may mắn và luôn vui vẻ!\n\n— NAMDEX" },
+            33: { name: "Nguyễn Trần Thiên Trang", wish: "Gửi bạn Nguyễn Trần Thiên Trang,\n\nLuôn duyên dáng, học giỏi và có một ngày 20/10 thật đáng nhớ!\n\n— NAMDEX" },
+            34: { name: "Ngô Thùy Trâm", wish: "Gửi bạn Ngô Thùy Trâm,\n\nLuôn tràn đầy năng lượng, tự tin và đạt được mọi hoài bão của mình!\n\n— NAMDEX" },
+            35: { name: "Nguyễn Ngọc Nhã Trúc", wish: "Gửi bạn Nguyễn Ngọc Nhã Trúc,\n\nLuôn dịu dàng, đáng yêu và gặt hái thật nhiều thành công!\n\n— NAMDEX" },
+            36: { name: "Mai Phạm Bảo Uyên", wish: "Gửi bạn Mai Phạm Bảo Uyên,\n\nLuôn vui tươi, gặp nhiều điều tốt đẹp và luôn là niềm tự hào của mọi người!\n\n— NAMDEX" },
+            37: { name: "Đặng Nguyễn Tường Vi", wish: "Gửi bạn Đặng Nguyễn Tường Vi,\n\nLuôn tươi vui như đóa hoa tường vi, học giỏi và luôn hạnh phúc!\n\n— NAMDEX" },
+            38: { name: "Nguyễn Thị Tường Vi", wish: "Gửi bạn Nguyễn Thị Tường Vi,\n\nMột ngày 20/10 ngập tràn niềm vui, luôn tự tin và đạt thành tích cao!\n\n— NAMDEX" },
+            39: { name: "Lý Hữu Triệu Vinh", wish: "Gửi bạn Lý Hữu Triệu Vinh,\n\nLuôn bản lĩnh, phong độ đỉnh cao, học tập tiến bộ và chinh phục mọi mục tiêu đề ra! ⚡\n\n— NAMDEX" },
+            40: { name: "Nguyễn Ngọc Tường Vy", wish: "Gửi bạn Nguyễn Ngọc Tường Vy,\n\nLuôn xinh đẹp, rạng ngời và có một ngày lễ 20/10 tuyệt vời nhất!\n\n— NAMDEX" },
+            41: { name: "Trần Như Ý", wish: "Gửi bạn Trần Như Ý,\n\nVạn sự như ý, luôn vui vẻ, học giỏi và gặt hái nhiều thành công trong cuộc sống!\n\n— NAMDEX" }
         };
 
         const questions = [
@@ -646,8 +643,6 @@
             document.getElementById('mainCard').style.display = 'none';
             document.getElementById('container').style.display = 'block';
             document.getElementById('tap-btn').classList.add('show');
-            document.getElementById('wish-btn').classList.add('show');
-            document.getElementById('letter-icon').classList.add('show');
             
             initGalaxyScene();
         }
@@ -675,125 +670,246 @@
             audio.play().catch(e => console.log("Audio autoplay restricted:", e));
         }
 
-        function createSnowflakes() {
-            const symbols = ['🌸', '✨', '💖', '🌹', '⭐'];
-            for (let i = 0; i < 20; i++) {
-                const div = document.createElement('div');
-                div.className = 'snowflake';
-                div.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
-                div.style.left = Math.random() * 100 + 'vw';
-                div.style.animationDuration = (Math.random() * 5 + 5) + 's, ' + (Math.random() * 2 + 2) + 's';
-                div.style.animationDelay = (Math.random() * 5) + 's';
-                div.style.fontSize = (Math.random() * 12 + 14) + 'px';
-                document.body.appendChild(div);
-            }
-        }
-        createSnowflakes();
+        // ================= CONFIG 3D GALAXY =================
+        const CONFIG = {
+            ringTexts: ['CHÚC MỪNG 20/10', 'NAMDEX - GALAXY LOVE'],
+            images: [
+                'https://raw.githubusercontent.com/namdexVND/VNDhinhanh/refs/heads/main/004f2e204a0aa6c5c7c9c6c8ffea082d.jpg',
+                'https://raw.githubusercontent.com/namdexVND/VNDhinhanh/refs/heads/main/bdddc4d3081f70a27b8387757cbb4523.jpg'
+            ],
+            hintText: 'Chạm Vào Tinh Cầu'
+        };
 
-        import * as THREE from 'three';
-        function initGalaxyScene() {
-            const container = document.getElementById('container');
-            if (!container || container.dataset.initialized) return;
-            container.dataset.initialized = "true";
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x000000, 0.0015);
 
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 5;
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100000);
+        camera.position.set(0, 20, 30);
 
-            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            container.appendChild(renderer.domElement);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        document.getElementById('container').appendChild(renderer.domElement);
 
-            const particleCount = 1500;
-            const geometry = new THREE.BufferGeometry();
-            const positions = new Float32Array(particleCount * 3);
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.5;
+        controls.enabled = false;
+        controls.target.set(0, 0, 0);
+        controls.enablePan = false;
+        controls.minDistance = 15;
+        controls.maxDistance = 300;
+        controls.zoomSpeed = 0.3;
+        controls.rotateSpeed = 0.3;
+        controls.update();
 
-            for (let i = 0; i < particleCount * 3; i += 3) {
-                positions[i] = (Math.random() - 0.5) * 15;
-                positions[i + 1] = (Math.random() - 0.5) * 15;
-                positions[i + 2] = (Math.random() - 0.5) * 15;
-            }
+        let introStarted = false;
+        let transitionProgress = 0;
 
-            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            const material = new THREE.PointsMaterial({
-                size: 0.05,
-                color: 0xff80bf,
-                transparent: true,
-                opacity: 0.8
-            });
+        // Hành tinh trung tâm
+        const planetGroup = new THREE.Group();
+        scene.add(planetGroup);
 
-            const particles = new THREE.Points(geometry, material);
-            scene.add(particles);
-
-            function animate() {
-                requestAnimationFrame(animate);
-                particles.rotation.y += 0.001;
-                particles.rotation.x += 0.0005;
-                renderer.render(scene, camera);
-            }
-            animate();
-
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
+        function createPlanetTexture(size = 512) {
+            const canvas = document.createElement('canvas');
+            canvas.width = canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            const gradient = ctx.createRadialGradient(size / 2, size / 2, size / 8, size / 2, size / 2, size / 2);
+            gradient.addColorStop(0, '#ffb8d6');
+            gradient.addColorStop(0.35, '#ff4da6');
+            gradient.addColorStop(0.7, '#a81c63');
+            gradient.addColorStop(1, '#000000');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.colorSpace = THREE.SRGBColorSpace;
+            return texture;
         }
 
-        document.getElementById('letter-icon').addEventListener('click', () => {
-            const stage = document.getElementById('letter-stage');
-            const env = document.getElementById('env');
-            const paper = document.getElementById('letter-paper');
-            
-            stage.classList.add('on');
-            setTimeout(() => env.classList.add('rise'), 300);
-            
-            setTimeout(() => {
-                env.classList.add('open');
-            }, 1800);
+        const planetMat = new THREE.MeshStandardMaterial({
+            map: createPlanetTexture(),
+            roughness: 0.85,
+            metalness: 0.1,
+            emissive: new THREE.Color(0xd6246e),
+            emissiveIntensity: 0.25
+        });
+        const planetMesh = new THREE.Mesh(new THREE.SphereGeometry(4.2, 64, 64), planetMat);
+        planetGroup.add(planetMesh);
 
+        // Vòng chữ xoay
+        const textCanvas = document.createElement('canvas');
+        textCanvas.width = 2048; textCanvas.height = 128;
+        const textCtx = textCanvas.getContext('2d');
+        textCtx.fillStyle = '#000000'; textCtx.fillRect(0, 0, 2048, 128);
+        textCtx.font = 'bold 52px "Be Vietnam Pro", Arial, sans-serif';
+        textCtx.fillStyle = '#ffb8d6'; textCtx.textAlign = 'center'; textCtx.textBaseline = 'middle';
+        textCtx.fillText(CONFIG.ringTexts.join('   •   ') + '   •   ', 1024, 64);
+        const textTexture = new THREE.CanvasTexture(textCanvas);
+        textTexture.colorSpace = THREE.SRGBColorSpace;
+        textTexture.wrapS = THREE.RepeatWrapping; textTexture.wrapT = THREE.RepeatWrapping;
+
+        const ringGeo = new THREE.RingGeometry(5.8, 8.2, 64);
+        const ringMat = new THREE.MeshBasicMaterial({
+            map: textTexture, side: THREE.DoubleSide, transparent: true, opacity: 0.85, depthWrite: false, blending: THREE.AdditiveBlending
+        });
+        const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+        ringMesh.rotation.x = Math.PI / 2.3;
+        planetGroup.add(ringMesh);
+
+        // Thiên hà sao
+        const starCount = 20000;
+        const starGeometry = new THREE.BufferGeometry();
+        const starPositions = new Float32Array(starCount * 3);
+        for (let i = 0; i < starCount * 3; i++) {
+            starPositions[i] = (Math.random() - 0.5) * 900;
+        }
+        starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+        const starMaterial = new THREE.PointsMaterial({
+            color: 0xffffff, size: 0.7, transparent: true, opacity: 1, depthWrite: false
+        });
+        const starField = new THREE.Points(starGeometry, starMaterial);
+        scene.add(starField);
+        starGeometry.setDrawRange(0, Math.floor(starCount * 0.1));
+
+        const tapBtn = document.getElementById('tap-btn');
+        const wishBtn = document.getElementById('wish-btn');
+        const letterIcon = document.getElementById('letter-icon');
+        const letterStage = document.getElementById('letter-stage');
+        const env = document.getElementById('env');
+        const letterPaper = document.getElementById('letter-paper');
+        const wishPanel = document.getElementById('wish-panel');
+
+        tapBtn.textContent = '♡ ' + CONFIG.hintText + ' ♡';
+
+        function triggerIntro() {
+            if (introClicked) return;
+            introClicked = true;
+            document.body.classList.add('intro-started');
+            tapBtn.classList.remove('show');
+            controls.enabled = true;
+            introStarted = true;
+        }
+
+        let introClicked = false;
+        tapBtn.addEventListener('click', triggerIntro);
+        renderer.domElement.addEventListener('click', () => { if (!introClicked) triggerIntro(); });
+
+        // Hiệu ứng thư
+        function typeWriterLetter(text) {
+            letterPaper.innerHTML = `
+                <div class="lt-title">Lời Chúc 20/10 ♡</div>
+                <div class="lt-orn">✦ ✦ ✦ ✦ ✦</div>
+                <p class="lt-p" id="lt-body"></p>
+                <div class="lt-gap"></div>
+                <div class="lt-sign" id="lt-sign" style="opacity:0"></div>
+                <button id="letter-done" type="button">Đã hiểu và nhận quà ✨</button>
+            `;
+            const bodyEl = document.getElementById('lt-body');
+            const signEl = document.getElementById('lt-sign');
+
+            const lines = text.split('\n');
+            let html = '';
+            for (let l = 0; l < lines.length; l++) {
+                const words = lines[l].split(' ');
+                for (let w = 0; w < words.length; w++) {
+                    html += `<span class="lt-w">${words[w]}</span> `;
+                }
+                if (l < lines.length - 1) html += '<br>';
+            }
+            bodyEl.innerHTML = html;
+            signEl.textContent = chosenStudentName;
+
+            const spans = letterPaper.querySelectorAll('.lt-w');
+            let idx = 0;
+            function revealWord() {
+                if (idx < spans.length) {
+                    spans[idx].classList.add('in');
+                    idx++;
+                    setTimeout(revealWord, 35);
+                } else {
+                    signEl.style.transition = 'opacity 1.2s ease';
+                    signEl.style.opacity = '1';
+                    const doneBtn = document.getElementById('letter-done');
+                    if (doneBtn) {
+                        doneBtn.classList.add('in');
+                        doneBtn.onclick = closeLetterModal;
+                    }
+                }
+            }
+            setTimeout(revealWord, 400);
+        }
+
+        letterIcon.addEventListener('click', () => {
+            letterStage.classList.add('on');
+            setTimeout(() => env.classList.add('rise'), 200);
+            setTimeout(() => env.classList.add('open'), 1600);
             setTimeout(() => {
                 env.classList.add('away');
-                paper.classList.add('show');
-                
-                paper.innerHTML = `
-                    <div class="lt-title">Gửi ${chosenStudentName} 🌸</div>
-                    <div class="lt-orn">✦ ✦ ✦ ✦ ✦</div>
-                    <p class="lt-p">${chosenStudentWish}</p>
-                    <div class="lt-gap"></div>
-                    <div class="lt-sign">Món quà 20/10 bí mật từ hệ thống ❤️</div>
-                    <button id="letter-done" class="in">Đã hiểu và nhận quà ✨</button>
-                `;
-                
-                document.getElementById('letter-done').addEventListener('click', closeLetter);
-            }, 3200);
+                letterPaper.classList.add('show');
+                typeWriterLetter(chosenStudentWish);
+            }, 2900);
         });
 
-        function closeLetter() {
-            document.getElementById('letter-stage').classList.remove('on');
-            document.getElementById('env').classList.remove('rise', 'open', 'away');
-            document.getElementById('letter-paper').classList.remove('show');
+        function closeLetterModal() {
+            letterStage.classList.remove('on');
+            env.classList.remove('rise', 'open', 'away');
+            letterPaper.classList.remove('show');
+            wishBtn.classList.add('show');
         }
 
-        document.getElementById('letter-x').addEventListener('click', closeLetter);
+        document.getElementById('letter-x').addEventListener('click', closeLetterModal);
 
-        document.getElementById('wish-btn').addEventListener('click', () => {
-            document.getElementById('wish-panel').classList.add('open');
-        });
-        document.getElementById('wish-close').addEventListener('click', () => {
-            document.getElementById('wish-panel').classList.remove('open');
-        });
+        wishBtn.addEventListener('click', () => wishPanel.classList.add('open'));
+        document.getElementById('wish-close').addEventListener('click', () => wishPanel.classList.remove('open'));
         document.getElementById('wish-send').addEventListener('click', () => {
-            const text = document.getElementById('wish-input').value.trim();
-            if(!text) {
-                alert("Vui lòng nhập lời chúc trước khi gửi lên sao băng nhé!");
-                return;
-            }
-            alert("✨ Điều ước của bạn đã bay cao lên vũ trụ thành công!");
-            document.getElementById('wish-input').value = "";
-            document.getElementById('wish-panel').classList.remove('open');
+            const txt = document.getElementById('wish-input').value.trim();
+            if (!txt) { alert('Vui lòng viết điều ước của bạn vào nhé!'); return; }
+            alert('✨ Điều ước của bạn đã được gửi bay cao lên thiên hà!');
+            document.getElementById('wish-input').value = '';
+            wishPanel.classList.remove('open');
         });
+
+        // Animation Loop
+        const clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+            const delta = clock.getDelta();
+
+            planetGroup.rotation.y += 0.003;
+            if (textTexture) textTexture.offset.x -= 0.0012;
+
+            if (introStarted && transitionProgress < 1) {
+                transitionProgress += delta * 0.65;
+                if (transitionProgress > 1) transitionProgress = 1;
+                const easeT = 1 - Math.pow(1 - transitionProgress, 3);
+                camera.position.set(0, 20 * (1 - easeT) + 6 * easeT, 30 * (1 - easeT) + 18 * easeT);
+                controls.target.set(0, 0, 0);
+                controls.update();
+
+                if (transitionProgress >= 1) {
+                    starGeometry.setDrawRange(0, starCount);
+                    setTimeout(() => letterIcon.classList.add('show'), 800);
+                }
+            }
+
+            if (!introStarted) {
+                planetMesh.rotation.y += 0.005;
+            }
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        setTimeout(() => tapBtn.classList.add('show'), 600);
     </script>
 </body>
 </html>
