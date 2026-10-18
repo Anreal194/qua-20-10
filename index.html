@@ -1,72 +1,530 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Món Quà 20/10 - Lớp Học Yêu Thương</title>
-<style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: radial-gradient(circle at center, #2a0824, #0f020c);
-    font-family: 'Be Vietnam Pro', Arial, sans-serif;
-    color: #fff;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Món Quà 20/11 Tri Ân Bí Mật 🎁</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-  /* Hiệu ứng hoa/trái tim rơi nền */
-  #flower-canvas {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-  }
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ffe6fa 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
 
-  .screen {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    box-sizing: border-box;
-    z-index: 10;
-    transition: opacity 0.8s ease, transform 0.8s ease;
-    opacity: 0;
-    pointer-events: none;
-  }
-  .screen.active {
-    opacity: 1;
-    pointer-events: auto;
-  }
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 35px 30px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(216, 27, 96, 0.15);
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            z-index: 999;
+            border: 1px solid rgba(255, 182, 193, 0.5);
+        }
 
-  /* Khung chung cho các hộp thoại */
-  .card-box {
-    width: min(90vw, 400px);
-    background: rgba(45, 10, 35, 0.75);
-    border: 1px solid rgba(255, 180, 220, 0.4);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
-    border-radius: 24px;
-    padding: 24px;
-    box-sizing: border-box;
-    text-align: center;
-    box-shadow: 0 0 40px rgba(255, 105, 180, 0.3);
-  }
+        h2 {
+            color: #d81b60;
+            margin-bottom: 15px;
+            font-size: 24px;
+            font-weight: 700;
+        }
 
-  h2 {
-    font-family: 'Pacifico', cursive;
-    color: #ffb3de;
-    font-size: 26px;
-    margin-top: 0;
-    margin-bottom: 16px;
-    text-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
-  }
+        p {
+            color: #555;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
 
-  p {
-    font-size: 15px;
-    line-height: 1.5;
-    color
+        .input-group {
+            margin: 20px 0;
+        }
+
+        input[type="number"] {
+            padding: 14px;
+            font-size: 18px;
+            width: 85%;
+            text-align: center;
+            border: 2px solid #ff4081;
+            border-radius: 12px;
+            outline: none;
+            transition: 0.3s;
+            background: #fffafa;
+            color: #333;
+        }
+
+        input:focus {
+            border-color: #d81b60;
+            box-shadow: 0 0 12px rgba(255, 64, 129, 0.3);
+            background: #fff;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #ff4081 0%, #d81b60 100%);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(255, 64, 129, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(216, 27, 96, 0.4);
+            filter: brightness(1.05);
+        }
+
+        .quiz-option-btn {
+            background: #fff0f5;
+            color: #d81b60;
+            border: 2px solid #ff4081;
+            text-align: left;
+            padding: 14px 18px;
+            font-weight: 500;
+        }
+
+        .quiz-option-btn:hover {
+            background: #ff4081;
+            color: white;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .gift-box {
+            background: linear-gradient(145deg, #fff0f5 0%, #ffe4ec 100%);
+            padding: 24px;
+            border-radius: 18px;
+            border: 2px dashed #ff4081;
+            margin-top: 15px;
+            box-shadow: inset 0 2px 8px rgba(255, 192, 203, 0.5);
+        }
+
+        .gift-box img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 14px;
+            margin-top: 15px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .gift-box img:hover {
+            transform: scale(1.02);
+        }
+
+        .comment-text {
+            color: #ff1744;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Nút bật/tắt nhạc nổi */
+        #musicBtn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #ff4081;
+            color: #d81b60;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        #musicBtn:hover {
+            transform: scale(1.1);
+            background: #fff;
+        }
+
+        /* Hiệu ứng hoa rơi */
+        .snowflake {
+            position: fixed;
+            top: -20px;
+            z-index: 998;
+            user-select: none;
+            cursor: default;
+            animation-name: fall, shake;
+            animation-duration: 10s, 3s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+        }
+
+        @keyframes fall {
+            0% { top: -20px; }
+            100% { top: 105vh; }
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0px); }
+            50% { transform: translateX(60px); }
+            100% { transform: translateX(0px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- THẺ PHÁT NHẠC -->
+    <audio id="bgMusic" loop>
+        <source src="nhac.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- NÚT BẬT/TẮT NHẠC NỔI GÓC TRÊN -->
+    <button id="musicBtn" onclick="toggleMusic()" title="Bật/Tắt nhạc nền">🎵</button>
+
+    <div class="card">
+        <!-- BƯỚC 1: Hỏi Số -->
+        <div id="step1" class="step active">
+            <h2>💐 Chào Bạn Sĩ Tử! 💐</h2>
+            <p>Nhập số thứ tự của bạn trong danh sách lớp (Từ 1 đến 41):</p>
+            <div class="input-group">
+                <input type="number" id="numInput" min="1" max="41" placeholder="Nhập số của bạn...">
+            </div>
+            <button onclick="goToStep2()">Khám Phá Ngay ➡️</button>
+        </div>
+
+        <!-- BƯỚC 2: Hỏi Hôm Nay Là Ngày Gì -->
+        <div id="step2" class="step">
+            <h2>❓ Đố Bạn Biết</h2>
+            <p>Sắp tới có một ngày lễ tri ân vô cùng ý nghĩa, đó là ngày gì thế nhỉ?</p>
+            <div class="btn-group">
+                <button onclick="answerDay('20-11')">Ngày Nhà giáo Việt Nam 20/11 👨‍🏫</button>
+                <button onclick="answerDay('khong')">Ngày gì ta... 😅</button>
+            </div>
+        </div>
+
+        <!-- BƯỚC 3: Hỏi Xác Nhận Tên & Ngày Sinh -->
+        <div id="step3" class="step">
+            <h2>✨ Xác Nhận Thông Tin ✨</h2>
+            <p id="commentDay" class="comment-text"></p>
+            <p>Có phải bạn là: <br><strong id="personName" style="font-size: 21px; color: #d81b60;">...</strong> <br><span id="personDob" style="font-size: 15px; color: #666; font-weight: 500;"></span></p>
+            <div class="btn-group">
+                <button onclick="startQuiz()">Đúng rồi, vượt thử thách nhận quà thôi! 🚀</button>
+            </div>
+        </div>
+
+        <!-- BƯỚC 4: 5 CÂU HỎI TRẮC NGHIỆM -->
+        <div id="stepQuiz" class="step">
+            <div id="quizProgress" class="progress-text">Câu hỏi 1 / 5</div>
+            <h2 id="quizQuestion">Nội dung câu hỏi...</h2>
+            <p id="quizFeedback" style="color: #ff1744; font-weight: bold; min-height: 24px; margin-bottom: 10px;"></p>
+            <div id="quizOptions" class="btn-group"></div>
+        </div>
+
+        <!-- BƯỚC 5: Hiển Thị Lời Chúc & Hình Ảnh -->
+        <div id="stepFinal" class="step">
+            <h2>🎁 Món Quà Tri Ân 20/11 🎁</h2>
+            <div class="gift-box">
+                <p id="finalWish" style="font-size: 16px; color: #333; font-weight: 600;"></p>
+                <img id="finalImg" src="" alt="Hình ảnh lời chúc 20/11">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =========================================================
+        // DANH SÁCH 41 HỌC SINH VÀ NGÀY SINH CHÍNH XÁC
+        // =========================================================
+        const data = {
+            1: { name: "Nguyễn Hoàng Gia An", dob: "18/11/2009", wish: "Chúc Gia An ngày 20/11 thật nhiều niềm vui, luôn tràn đầy năng lượng và đạt thành tích xuất sắc trong học tập!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
+            2: { name: "Nguyễn Trâm Anh", dob: "25/05/2009", wish: "Chúc Trâm Anh luôn xinh tươi, rạng rỡ, học giỏi và gặt hái được nhiều ước mơ của mình!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
+            3: { name: "Trương Thị Phương Anh", dob: "01/01/2009", wish: "Chúc Phương Anh khởi đầu năm mới trọn vẹn, luôn may mắn, hạnh phúc và tiến bước thành công!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
+            4: { name: "Trần Xuân Việt Bách", dob: "28/08/2009", wish: "Chúc Việt Bách luôn bản lĩnh, phong độ, chinh phục mọi đỉnh cao tri thức!", img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=400" },
+            5: { name: "Nguyễn Ngọc Bảo Chi", dob: "10/07/2009", wish: "Chúc Bảo Chi luôn đáng yêu, học tập chăm ngoan và nhận được thật nhiều yêu thương!", img: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400" },
+            6: { name: "Bùi Thị Thùy Dương", dob: "02/01/2009", wish: "Chúc Thùy Dương luôn tỏa sáng rực rỡ, tràn ngập tiếng cười và luôn gặp may mắn trong cuộc sống!", img: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400" },
+            7: { name: "Lê Phương Đan", dob: "24/09/2009", wish: "Chúc Phương Đan luôn kiên định, tự tin và đạt kết quả cao nhất trong mọi kỳ thi!", img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400" },
+            8: { name: "Nguyễn Thành Đạt", dob: "10/05/2009", wish: "Chúc Thành Đạt luôn đạt thành tích khủng, gặt hái nhiều điểm 10 danh giá!", img: "https://images.unsplash.com/photo-1516534775068-ba3e7458af70?w=400" },
+            9: { name: "Cao Hải Đăng", dob: "10/10/2009", wish: "Chúc Hải Đăng luôn tỏa sáng như ngọn hải đăng, vững bước trên con đường tương lai!", img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400" },
+            10: { name: "Nguyễn Hoàng Trúc Giang", dob: "21/09/2009", wish: "Chúc Trúc Giang luôn vui vẻ, hồn nhiên, học giỏi và luôn giữ nụ cười trên môi!", img: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=400" },
+            11: { name: "Nguyễn Ngọc Vân Hà", dob: "30/01/2009", wish: "Chúc Vân Hà luôn dịu dàng, học tập tiến bộ và gặt hái thật nhiều thành công mới!", img: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400" },
+            12: { name: "Nguyễn Trần Gia Hân", dob: "29/09/2009", wish: "Chúc Gia Hân luôn ngập tràn niềm vui, học giỏi và luôn là niềm tự hào của mọi người!", img: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400" },
+            13: { name: "Trịnh Đình Thư Kỳ", dob: "08/03/2009", wish: "Chúc Thư Kỳ luôn xinh đẹp, tài năng và đạt được mọi ước mơ hoài bão của mình!", img: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=400" },
+            14: { name: "Điện Thảo Linh", dob: "16/03/2009", wish: "Chúc Thảo Linh luôn tươi tắn, học giỏi và có một mùa tri ân 20/11 thật ý nghĩa!", img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400" },
+            15: { name: "Lê Thị Mai Linh", dob: "02/10/2009", wish: "Chúc Mai Linh luôn rạng rỡ như đóa mai sớm, học tập xuất sắc và luôn gặp điều lành!", img: "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400" },
+            16: { name: "Hồ Trúc Ly", dob: "07/04/2009", wish: "Chúc Trúc Ly luôn mạnh mẽ, kiên cường như cây trúc, vươn cao vươn xa trong học tập!", img: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400" },
+            17: { name: "Nguyễn Thiều Trà My", dob: "07/11/2009", wish: "Chúc Trà My luôn ngọt ngào, đáng yêu, đạt kết quả cao trong mọi thử thách!", img: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400" },
+            18: { name: "Võ Ngọc Trà My", dob: "24/09/2009", wish: "Chúc Trà My luôn vui vẻ, học giỏi và gặt hái thật nhiều thành công rực rỡ!", img: "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=400" },
+            19: { name: "Đỗ Thanh Ngọc", dob: "10/02/2009", wish: "Chúc Thanh Ngọc luôn tỏa sáng lấp lánh như viên ngọc quý, học tập thật tốt nhé!", img: "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=400" },
+            20: { name: "Phạm Lữ Nguyên Ngọc", dob: "17/08/2009", wish: "Chúc Nguyên Ngọc luôn tràn đầy năng lượng, học giỏi và luôn gặp nhiều may mắn!", img: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400" },
+            21: { name: "Lê Uyên Nhi", dob: "30/05/2009", wish: "Chúc Uyên Nhi luôn dịu dàng, chăm ngoan và đạt điểm cao trong mọi kỳ thi!", img: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400" },
+            22: { name: "Ngô Thị Yến Nhi", dob: "29/01/2009", wish: "Chúc Yến Nhi luôn tươi vui, hạnh phúc và gặt hái nhiều thành công trên con đường học tập!", img: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=400" },
+            23: { name: "Trần Lê Yến Nhi", dob: "17/08/2009", wish: "Chúc Yến Nhi luôn tự tin, xinh xắn và đạt được mọi mục tiêu mình đề ra!", img: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=400" },
+            24: { name: "Nguyễn Ngọc Minh Phương", dob: "22/10/2009", wish: "Chúc Minh Phương luôn thông minh, sáng suốt và gặt hái nhiều thành tựu lớn!", img: "https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=400" },
+            25: { name: "Nguyễn Đắc Khánh Quỳnh", dob: "15/11/2009", wish: "Chúc Khánh Quỳnh luôn rạng ngời, học tập xuất sắc và có một ngày lễ 20/11 tuyệt vời!", img: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=400" },
+            26: { name: "Bùi Đỗ Phương Thúy", dob: "10/12/2009", wish: "Chúc Phương Thúy luôn chăm ngoan, học giỏi và gặt hái thật nhiều thành tích tốt đẹp!", img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=400" },
+            27: { name: "Bùi Ngọc Anh Thư", dob: "21/05/2009", wish: "Chúc Anh Thư luôn tài năng, xinh đẹp và đạt kết quả cao trong học tập!", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" },
+            28: { name: "Lê Nguyễn Anh Thư", dob: "27/03/2009", wish: "Chúc Anh Thư luôn tràn đầy cảm hứng, học tập tiến bộ và gặt hái nhiều điểm 10!", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400" },
+            29: { name: "Phan Hoàng Minh Thư", dob: "14/02/2009", wish: "Chúc Minh Thư luôn ngọt ngào, đáng yêu và nhận được thật nhiều quà ý nghĩa!", img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400" },
+            30: { name: "Phạm Trần Hoài Thương", dob: "29/03/2009", wish: "Chúc Hoài Thương luôn được yêu mến, học giỏi và có một mùa tri ân đong đầy hạnh phúc!", img: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400" },
+            31: { name: "Phạm Lê Bảo Thy", dob: "21/07/2009", wish: "Chúc Bảo Thy luôn tỏa sáng như báu vật, luôn vui vẻ và đạt thành tích cao!", img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400" },
+            32: { name: "Nguyễn Thị Thủy Tiên", dob: "06/10/2009", wish: "Chúc Thủy Tiên luôn xinh đẹp tựa nàng tiên, học giỏi và gặp nhiều may mắn trong đời!", img: "https://images.unsplash.com/photo-1516534775068-ba3e7458af70?w=400" },
+            33: { name: "Nguyễn Trần Thiên Trang", dob: "02/03/2009", wish: "Chúc Thiên Trang luôn thanh lịch, học tập xuất sắc và luôn dẫn đầu phong trào!", img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400" },
+            34: { name: "Ngô Thùy Trâm", dob: "06/04/2009", wish: "Chúc Thùy Trâm luôn bản lĩnh, chăm ngoan và chinh phục mọi đỉnh cao tri thức!", img: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=400" },
+            35: { name: "Nguyễn Ngọc Nhã Trúc", dob: "05/05/2009", wish: "Chúc Nhã Trúc luôn dịu dàng, tinh tế, học tập ngày càng tiến bộ vượt bậc!", img: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400" },
+            36: { name: "Mai Phạm Bảo Uyên", dob: "08/12/2009", wish: "Chúc Bảo Uyên luôn bình an, hạnh phúc và đạt kết quả cao trong mọi kỳ thi!", img: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400" },
+            37: { name: "Đặng Nguyễn Tường Vi", dob: "27/07/2009", wish: "Chúc Tường Vi luôn tươi tắn như đóa hoa vi, học giỏi và luôn gặp điều tốt lành!", img: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=400" },
+            38: { name: "Nguyễn Thị Tường Vi", dob: "13/09/2009", wish: "Chúc Tường Vi luôn rạng rỡ, tràn đầy năng lượng và đạt được mọi hoài bão lớn!", img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400" },
+            39: { name: "Lý Hữu Triệu Vinh", dob: "06/10/2009", wish: "Chúc Triệu Vinh luôn phong độ, bản lĩnh, gặt hái thật nhiều điểm 10 vinh quang!", img: "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400" },
+            40: { name: "Nguyễn Ngọc Tường Vy", dob: "30/01/2009", wish: "Chúc Tường Vy luôn xinh xắn, học giỏi và có một mùa 20/11 ngập tràn kỷ niệm đẹp!", img: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400" },
+            41: { name: "Trần Như Ý", dob: "22/03/2009", wish: "Chúc Như Ý vạn sự như ý, luôn mỉm cười hạnh phúc và đạt thành công rực rỡ!", img: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400" }
+        };
+
+        // =========================================================
+        // BỘ 5 CÂU HỎI TRẮC NGHIỆM VỀ 20/11
+        // =========================================================
+        const questions = [
+            {
+                q: "1. Ngày 20/11 hàng năm ở Việt Nam là ngày gì?",
+                options: [
+                    "A. Ngày Nhà giáo Việt Nam 💐",
+                    "B. Ngày Quốc tế Phụ nữ",
+                    "C. Ngày Học sinh Sinh viên"
+                ],
+                correctAnswer: 0
+            },
+            {
+                q: "2. Loài hoa nào thường được dùng phổ biến nhất để tri ân thầy cô ngày 20/11?",
+                options: [
+                    "A. Hoa Hồng 🌹",
+                    "B. Hoa Hướng Dương 🌻",
+                    "C. Cả hai loài hoa trên 🥰"
+                ],
+                correctAnswer: 2
+            },
+            {
+                q: "3. Hình ảnh nào thường được ví với công ơn dạy dỗ của thầy cô?",
+                options: [
+                    "A. Người lái đò đưa khách qua sông 🚣‍♂️",
+                    "B. Ngọn nón che mưa nắng",
+                    "C. Cây đại thụ tỏa bóng mát"
+                ],
+                correctAnswer: 0
+            },
+            {
+                q: "4. Điều gì khiến các thầy cô hạnh phúc nhất trong ngày 20/11?",
+                options: [
+                    "A. Sự trưởng thành và nụ cười của học trò 🎓",
+                    "B. Món quà đắt tiền",
+                    "C. Được nghỉ học cả tuần"
+                ],
+                correctAnswer: 0
+            },
+            {
+                q: "5. Bạn đã sẵn sàng mở món quà bí mật 20/11 chưa?",
+                options: [
+                    "A. Sẵn sàng rồi, mở quà thôi! 🎁",
+                    "B. Chưa sẵn sàng lắm",
+                    "C. Từ từ đã"
+                ],
+                correctAnswer: 0
+            }
+        ];
+
+        let selectedNumber = null;
+        let currentQuestionIndex = 0;
+
+        // Xử lý Bước 1
+        function goToStep2() {
+            const num = document.getElementById('numInput').value;
+            if (!num || num < 1 || num > 41) {
+                alert("Vui lòng nhập số thứ tự hợp lệ từ 1 đến 41 nhé!");
+                return;
+            }
+            selectedNumber = num;
+            playMusic();
+            showStep('step2');
+        }
+
+        // Xử lý Bước 2
+        function answerDay(choice) {
+            const commentElement = document.getElementById('commentDay');
+            if (choice === '20-11') {
+                commentElement.innerText = "Chính xác tuyệt đối! 👏";
+            } else {
+                commentElement.innerText = "Bật mí nhỏ: Hôm nay chính là dịp 20/11 đấy nha! 😜";
+            }
+
+            const person = data[selectedNumber];
+            if (person) {
+                document.getElementById('personName').innerText = person.name;
+                document.getElementById('personDob').innerText = `📅 Ngày sinh: ${person.dob}`;
+            } else {
+                document.getElementById('personName').innerText = "Học sinh số " + selectedNumber;
+                document.getElementById('personDob').innerText = "";
+            }
+            
+            showStep('step3');
+        }
+
+        // Bắt đầu phần trả lời 5 câu hỏi
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            document.getElementById('quizFeedback').innerText = "";
+            showQuestion();
+            showStep('stepQuiz');
+        }
+
+        // Hiển thị nội dung từng câu hỏi
+        function showQuestion() {
+            const qData = questions[currentQuestionIndex];
+            document.getElementById('quizProgress').innerText = `Câu hỏi ${currentQuestionIndex + 1} / ${questions.length}`;
+            document.getElementById('quizQuestion').innerText = qData.q;
+            document.getElementById('quizFeedback').innerText = ""; 
+
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+
+            qData.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(index);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        // Kiểm tra đúng / sai
+        function checkAnswer(selectedIndex) {
+            const qData = questions[currentQuestionIndex];
+            const feedbackElement = document.getElementById('quizFeedback');
+
+            if (selectedIndex === qData.correctAnswer) {
+                feedbackElement.style.color = "#2e7d32"; 
+                feedbackElement.innerText = "Chính xác! 🎉 Đang chuyển câu tiếp theo...";
+                
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    if (currentQuestionIndex < questions.length) {
+                        showQuestion();
+                    } else {
+                        goToFinalStep();
+                    }
+                }, 800); 
+            } else {
+                feedbackElement.style.color = "#d32f2f"; 
+                feedbackElement.innerText = "Chưa chính xác rồi, thử chọn đáp án khác xem nào! ❌";
+            }
+        }
+
+        // Xử lý Hiện Quà Cuối Cùng
+        function goToFinalStep() {
+            const person = data[selectedNumber];
+            const wishElement = document.getElementById('finalWish');
+            const imgElement = document.getElementById('finalImg');
+
+            if (person) {
+                wishElement.innerText = person.wish;
+                imgElement.src = person.img;
+            } else {
+                wishElement.innerText = "Chúc bạn có một ngày 20/11 thật vui vẻ, ngập tràn may mắn và đạt nhiều thành tích tốt!";
+                imgElement.src = "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400";
+            }
+
+            showStep('stepFinal');
+        }
+
+        // Hàm chuyển đổi các bước
+        function showStep(stepId) {
+            document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+            document.getElementById(stepId).classList.add('active');
+        }
+
+        // Bộ điều khiển nhạc
+        function playMusic() {
+            const music = document.getElementById('bgMusic');
+            music.play().catch(error => {
+                console.log("Trình duyệt chặn nhạc tự động: ", error);
+            });
+        }
+
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const btn = document.getElementById('musicBtn');
+            if (music.paused) {
+                music.play();
+                btn.innerText = "🎵";
+            } else {
+                music.pause();
+                btn.innerText = "🔇";
+            }
+        }
+
+        // Hiệu ứng hoa rơi tự động
+        function createFlower() {
+            const flower = document.createElement('div');
+            flower.classList.add('snowflake');
+            flower.innerHTML = ['🌸', '🌹', '🌷', '✨', '💖', '💐'][Math.floor(Math.random() * 6)];
+            flower.style.left = Math.random() * window.innerWidth + 'px';
+            flower.style.fontSize = (Math.random() * 15 + 16) + 'px';
+            
+            const duration = Math.random() * 5 + 5;
+            flower.style.animationDuration = `${duration}s, 3s`;
+            
+            document.body.appendChild(flower);
+
+            setTimeout(() => {
+                flower.remove();
+            }, duration * 1000);
+        }
+
+        setInterval(createFlower, 280);
+    </script>
+
+</body>
+</html>
