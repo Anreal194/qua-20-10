@@ -308,14 +308,12 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // ---- CẤU HÌNH: CHỈNH SỬA Ở ĐÂY ----
 // =====================================================================
 const CONFIG = {
-  // Các dòng chữ quay quanh hành tinh
   ringTexts: [
     'XIN LỖI VÌ NHỮNG LẦN LÀM EM BUỒN',
     'THƯƠNG MỖI EM NGUYÊN',
     'CHÚC MỪNG 20/10',
     'NAMDEX'
   ],
-  // Ảnh của bạn
   images: [
     'https://raw.githubusercontent.com/namdexVND/VNDhinhanh/refs/heads/main/004f2e204a0aa6c5c7c9c6c8ffea082d.jpg',
     'https://raw.githubusercontent.com/namdexVND/VNDhinhanh/refs/heads/main/bdddc4d3081f70a27b8387757cbb4523.jpg',
@@ -337,6 +335,53 @@ const CONFIG = {
   },
   holdAfterName2: 5,
   nameDelay: 10
+};
+
+// =====================================================================
+// ---- DANH SÁCH 41 HỌC SINH VÀ NGÀY SINH ----
+// =====================================================================
+const studentData = {
+    1: { name: "Nguyễn Hoàng Gia An", dob: "18/11/2009" },
+    2: { name: "Nguyễn Trâm Anh", dob: "25/05/2009" },
+    3: { name: "Trương Thị Phương Anh", dob: "01/01/2009" },
+    4: { name: "Trần Xuân Việt Bách", dob: "28/08/2009" },
+    5: { name: "Nguyễn Ngọc Bảo Chi", dob: "10/07/2009" },
+    6: { name: "Bùi Thị Thùy Dương", dob: "02/01/2009" },
+    7: { name: "Lê Phương Đan", dob: "24/09/2009" },
+    8: { name: "Nguyễn Thành Đạt", dob: "10/05/2009" },
+    9: { name: "Cao Hải Đăng", dob: "10/10/2009" },
+    10: { name: "Nguyễn Hoàng Trúc Giang", dob: "21/09/2009" },
+    11: { name: "Nguyễn Ngọc Vân Hà", dob: "30/01/2009" },
+    12: { name: "Nguyễn Trần Gia Hân", dob: "29/09/2009" },
+    13: { name: "Trịnh Đình Thư Kỳ", dob: "08/03/2009" },
+    14: { name: "Điện Thảo Linh", dob: "16/03/2009" },
+    15: { name: "Lê Thị Mai Linh", dob: "02/10/2009" },
+    16: { name: "Hồ Trúc Ly", dob: "07/04/2009" },
+    17: { name: "Nguyễn Thiều Trà My", dob: "07/11/2009" },
+    18: { name: "Võ Ngọc Trà My", dob: "24/09/2009" },
+    19: { name: "Đỗ Thanh Ngọc", dob: "10/02/2009" },
+    20: { name: "Phạm Lữ Nguyên Ngọc", dob: "17/08/2009" },
+    21: { name: "Lê Uyên Nhi", dob: "30/05/2009" },
+    22: { name: "Ngô Thị Yến Nhi", dob: "29/01/2009" },
+    23: { name: "Trần Lê Yến Nhi", dob: "17/08/2009" },
+    24: { name: "Nguyễn Ngọc Minh Phương", dob: "22/10/2009" },
+    25: { name: "Nguyễn Đắc Khánh Quỳnh", dob: "15/11/2009" },
+    26: { name: "Bùi Đỗ Phương Thúy", dob: "10/12/2009" },
+    27: { name: "Bùi Ngọc Anh Thư", dob: "21/05/2009" },
+    28: { name: "Lê Nguyễn Anh Thư", dob: "27/03/2009" },
+    29: { name: "Phan Hoàng Minh Thư", dob: "14/02/2009" },
+    30: { name: "Phạm Trần Hoài Thương", dob: "29/03/2009" },
+    31: { name: "Phạm Lê Bảo Thy", dob: "21/07/2009" },
+    32: { name: "Nguyễn Thị Thủy Tiên", dob: "06/10/2009" },
+    33: { name: "Nguyễn Trần Thiên Trang", dob: "02/03/2009" },
+    34: { name: "Ngô Thùy Trâm", dob: "06/04/2009" },
+    35: { name: "Nguyễn Ngọc Nhã Trúc", dob: "05/05/2009" },
+    36: { name: "Mai Phạm Bảo Uyên", dob: "08/12/2009" },
+    37: { name: "Đặng Nguyễn Tường Vi", dob: "27/07/2009" },
+    38: { name: "Nguyễn Thị Tường Vi", dob: "13/09/2009" },
+    39: { name: "Lý Hữu Triệu Vinh", dob: "06/10/2009" },
+    40: { name: "Nguyễn Ngọc Tường Vy", dob: "30/01/2009" },
+    41: { name: "Trần Như Ý", dob: "22/03/2009" }
 };
 
 const EXTRA = (window.dataCCD && window.dataCCD.data) || {};
@@ -371,8 +416,6 @@ controls.maxDistance = 300;
 controls.zoomSpeed = 0.3;
 controls.rotateSpeed = 0.3;
 controls.update();
-
-const maxAniso = renderer.capabilities.getMaxAnisotropy();
 
 let introStarted = false;
 let fadeOpacity = 0.1;
@@ -869,7 +912,7 @@ const letterX = document.getElementById('letter-x');
 const env = document.getElementById('env');
 const letterPaper = document.getElementById('letter-paper');
 
-let introState = 0; // 0: chờ chạm, 1: đang bay vào, 2: hoàn tất
+let introState = 0;
 let audioEl = null;
 
 if (CONFIG.music) {
@@ -889,7 +932,6 @@ tapBtn.addEventListener('click', () => {
 
   if (audioEl) audioEl.play().catch(e => console.log(e));
 
-  // Hiệu ứng chuyển camera từ xa vào gần hành tinh
   let startPos = camera.position.clone();
   let targetPos = new THREE.Vector3(0, 5, 20);
   let startTime = performance.now();
@@ -914,7 +956,6 @@ tapBtn.addEventListener('click', () => {
   requestAnimationFrame(animateIntro);
 });
 
-// Hộp điều ước
 wishBtn.addEventListener('click', () => wishPanel.classList.add('open'));
 wishClose.addEventListener('click', () => wishPanel.classList.remove('open'));
 wishSend.addEventListener('click', () => {
@@ -926,7 +967,6 @@ wishSend.addEventListener('click', () => {
   }
 });
 
-// Thư điện ảnh
 let letterOpened = false;
 letterIcon.addEventListener('click', () => {
   letterStage.classList.add('on');
@@ -984,7 +1024,6 @@ function renderLetterText() {
       doneBtn.classList.add('in');
       doneBtn.onclick = () => {
         letterX.click();
-        // Kích hoạt hiển thị ảnh/tinh vân khi đọc xong thư
         photosRevealed = true;
         photoRevealTarget = 1;
       };
@@ -1000,14 +1039,11 @@ const clock = new THREE.Clock();
 function animate() {
   requestAnimationFrame(animate);
   const delta = clock.getDelta();
-  const time = clock.getElapsedTime();
 
-  // Quay vòng chữ và hành tinh
   ringMesh.rotation.z += 0.002;
   planetMesh.rotation.y += 0.001;
   textTexture.offset.x -= 0.001;
 
-  // Xử lý sao băng ngẫu nhiên
   if (Math.random() < 0.02) createShootingStar();
   for (let i = shootingStars.length - 1; i >= 0; i--) {
     let s = shootingStars[i];
@@ -1020,11 +1056,10 @@ function animate() {
     }
   }
 
-  // Hiệu ứng hiện ảnh sau khi xem thư
   if (photosRevealed && photoReveal < photoRevealTarget) {
     photoReveal += delta * 0.4;
     if (photoReveal > 1) photoReveal = 1;
-    photoGroups.forEach((g, idx) => {
+    photoGroups.forEach((g) => {
       g.pts.visible = true;
       g.mat.opacity = photoReveal * 0.85;
       const s = 0.5 + photoReveal * 0.5;
@@ -1037,7 +1072,6 @@ function animate() {
   renderer.render(scene, camera);
 }
 
-// Xử lý thay đổi kích thước màn hình
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
